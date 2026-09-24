@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta charset="utf-8">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f4f7f6;
+        color: #333;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto 20px auto;
+        background: #ffffff;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      }
+      h2 {
+        margin-top: 0;
+        color: #2c3e50;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: 13px;
+      }
+      input[type="text"],
+      input[type="email"],
+      input[type="url"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      /* Painikkeet */
+      .btn-pieni {
+        padding: 10px 15px;
+        background-color: #27ae60;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 13px;
+        white-space: nowrap;
+      }
+      .btn-pieni:hover {
+        background-color: #219150;
+      }
+      .btn-lisaa {
+        background-color: #2980b9;
+      }
+      .btn-lisaa:hover {
+        background-color: #1c5980;
+      }
+
+      /* Tagien / laatikoiden säiliö */
+      .tagit-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        min-height: 42px;
+        background-color: #fafafa;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      .tagi {
+        background-color: #e1f5fe;
+        color: #0288d1;
+        border: 1px solid #b3e5fc;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .tagi .poista-btn {
+        cursor: pointer;
+        color: #e53935;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      /* Yläosan kytkin ja otsikko */
+      .palkki-ryhma {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      /* Liukuva kytkin */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 26px;
+      }
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: #ccc;
+        transition: .3s;
+        border-radius: 34px;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .3s;
+        border-radius: 50%;
+      }
+      input:checked + .slider {
+        background-color: #27ae60;
+      }
+      input:checked + .slider:before {
+        transform: translateX(24px);
+      }
+
+      /* Drop Zone */
+      .drop-zone {
+        border: 2px dashed #2980b9;
+        border-radius: 6px;
+        padding: 20px;
+        text-align: center;
+        background-color: #f8fafc;
+        color: #555;
+        cursor: pointer;
+        transition: background-color 0.2s, border-color 0.2s;
+        font-size: 13px;
+      }
+      .drop-zone:hover {
+        background-color: #ebf5fb;
+        border-color: #1b4f72;
+      }
+
+      /* Pääpainike */
+      .submit-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #2980b9;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-top: 10px;
+      }
+      .submit-btn:disabled {
+        background-color: #bdc3c7;
+        cursor: not-allowed;
+      }
+      
+      /* Ponnahdusikkuna (Modal) */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0; top: 0;
+        width: 100%; height: 100%;
+        background-color: rgba(0,0,0,0.4);
+      }
+      .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 8px;
+        width: 320px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      }
+      .modal-napit {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 15px;
+      }
+      .btn-peruuta {
+        background-color: #95a5a6;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      /* Ilmoitusviestit */
+      #ilmoitus {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 4px;
+        display: none;
+        font-size: 14px;
+      }
+      .success { background-color: #d4edda; color: #155724; }
+      .error { background-color: #f8d7da; color: #721c24; }
+    </style>
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="palkki-ryhma">
+        <h2>Hakemus luonnos AI-agentti</h2>
+      </div>
+      
+      <div class="form-group">
+        <!-- Uusi vapaasti kirjoitettava tekstikenttä ohjeille/tarkennuksille -->
+        <label for="ohjeetAgentille" style="margin-top: 10px;">Tarkentavat ohjeet AI-agentille:</label>
+        <textarea id="ohjeetAgentille" placeholder="Kirjoita tähän tarkentavia ohjeita agentille (esim. painotukset, rajoitukset)..." 
+        style="width: 100%; min-height: 180px; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-family: inherit; font-size: 14px; line-height: 1.5; resize: vertical; background-color: #fdfdfd;"
+        ></textarea>
+      </div>
+
+
+      <!-- 3. Linkki -->
+      <div class="form-group">
+        <label for="linkki">Linkki valittuun hakemukseen. (URL):</label>
+        <input type="url" id="linkki" placeholder="https://example.com">
+      </div>
+
+      <!-- 4. Google Drive -pudotuslaatikko -->
+      <div class="form-group">
+        <label>Google Drive -tiedosto, jossa on malli esimerkki hakemuspohjasta.:</label>
+        <div id="dropZone" class="drop-zone" onclick="document.getElementById('fileInput').click()">
+          <span id="dropZoneTeksti">📁 Pudota tiedosto/linkki tähän tai klikkaa</span>
+          <input type="file" id="fileInput" style="display: none;" onchange="paivitaTiedosto(this.files)">
+        </div>
+      </div>
+
+      <!-- Google Drive -kansion linkki -->
+        <div class="form-group" style="margin-top: 15px;">
+          <label for="driveKansioUrl">Google Drive -kansion linkki (projektin tiedostot):</label>
+          <input 
+            type="text" 
+            id="driveKansioUrl" 
+            placeholder="https://drive.google.com/drive/folders/..." 
+            style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;"
+          >
+        </div>
+
+      <!-- Käynnistä-painike -->
+      <button type="button" id="submitBtn" class="submit-btn" onclick="kaynnistaSovellus()">Käynnistä sovellus</button>
+
+      <div id="ilmoitus"></div>
+    </div>
+
+    <!-- Ponnahdusikkuna (Modal) uusien kohteiden lisäämiseksi -->
+    <div id="syoteModal" class="modal">
+      <div class="modal-content">
+        <h3 id="modalOtsikko" style="margin-top:0;">Lisää uusi</h3>
+        <input type="text" id="modalInput" placeholder="Kirjoita tähän...">
+        <div class="modal-napit">
+          <button type="button" class="btn-peruuta" onclick="suljeModal()">Peruuta</button>
+          <button type="button" class="btn-pieni btn-lisaa" onclick="lisaaKohtaListaan()">Lisää</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let sovellusPaalla = true;
+      let parametritTaulukko = [];
+      let sahkopostitTaulukko = [];
+      let nykyinenModalTyyppi = 'sana'; // 'sana' tai 'sahkoposti'
+
+      // Ladataan aiemmat tiedot heti kun ikkuna aukeaa
+      window.onload = function() {
+        google.script.run
+          .withSuccessHandler(paivitaKentat)
+          .withFailureHandler((err) => naytaIlmoitus("Hakuvirhe: " + err.message, "error"))
+          .haeTiedotSheetsista();
+      };
+
+      function paivitaKentat(data) {
+        if (data) {
+          // Sanat
+          parametritTaulukko = data.parametrit ? data.parametrit.split(',').map(s => s.trim()).filter(s => s.length > 0) : [];
+          paivitaSanatUI();
+
+          // Sähköpostit
+          sahkopostitTaulukko = data.sahkoposti ? data.sahkoposti.split(',').map(s => s.trim()).filter(s => s.length > 0) : [];
+          paivitaSahkopostitUI();
+
+          // Tarkentavat ohjeet agentille
+          if (data.ohjeet) {
+            document.getElementById('ohjeetAgentille').value = data.ohjeet;
+          }
+
+          // AI Agentin löydökset
+          if (data.aiLoydokset) {
+            document.getElementById('aiLoydokset').value = data.aiLoydokset;
+          }
+        } else {
+          parametritTaulukko = [];
+          sahkopostitTaulukko = [];
+          paivitaSanatUI();
+          paivitaSahkopostitUI();
+        }
+      }
+
+      // Modal-ikkunan hallinta
+      function avaaModal(tyyppi) {
+        nykyinenModalTyyppi = tyyppi;
+        const input = document.getElementById('modalInput');
+        const otsikko = document.getElementById('modalOtsikko');
+
+        input.value = '';
+        if (tyyppi === 'sana') {
+          otsikko.textContent = 'Lisää uusi sana';
+          input.placeholder = 'esim. Sana1';
+          input.type = 'text';
+        } else {
+          otsikko.textContent = 'Lisää uusi sähköposti';
+          input.placeholder = 'esim. kayttaja@example.com';
+          input.type = 'email';
+        }
+
+        document.getElementById('syoteModal').style.display = 'block';
+        input.focus();
+      }
+
+      function suljeModal() {
+        document.getElementById('syoteModal').style.display = 'none';
+      }
+
+      function lisaaKohtaListaan() {
+        const arvo = document.getElementById('modalInput').value.trim();
+        if (arvo !== '') {
+          if (nykyinenModalTyyppi === 'sana') {
+            parametritTaulukko.push(arvo);
+            paivitaSanatUI();
+          } else {
+            sahkopostitTaulukko.push(arvo);
+            paivitaSahkopostitUI();
+          }
+          suljeModal();
+        }
+      }
+
+      // Poistofunktiot
+      function poistaSana(index) {
+        parametritTaulukko.splice(index, 1);
+        paivitaSanatUI();
+      }
+
+      function poistaSahkoposti(index) {
+        sahkopostitTaulukko.splice(index, 1);
+        paivitaSahkopostitUI();
+      }
+
+      // UI-päivitykset tageille
+      function paivitaSanatUI() {
+        const container = document.getElementById('sanatLista');
+        container.innerHTML = '';
+
+        if (parametritTaulukko.length === 0) {
+          container.innerHTML = '<span style="color: #aaa; font-size: 12px;">Ei sanoja lisätty</span>';
+          return;
+        }
+
+        parametritTaulukko.forEach((sana, index) => {
+          const tag = document.createElement('div');
+          tag.className = 'tagi';
+          tag.innerHTML = `<span>${sana}</span> <span class="poista-btn" onclick="poistaSana(${index})">&times;</span>`;
+          container.appendChild(tag);
+        });
+      }
+
+      function paivitaSahkopostitUI() {
+        const container = document.getElementById('sahkopostitLista');
+        container.innerHTML = '';
+
+        if (sahkopostitTaulukko.length === 0) {
+          container.innerHTML = '<span style="color: #aaa; font-size: 12px;">Ei sähköposteja lisätty</span>';
+          return;
+        }
+
+        sahkopostitTaulukko.forEach((sposti, index) => {
+          const tag = document.createElement('div');
+          tag.className = 'tagi';
+          tag.innerHTML = `<span>${sposti}</span> <span class="poista-btn" onclick="poistaSahkoposti(${index})">&times;</span>`;
+          container.appendChild(tag);
+        });
+      }
+
+      // Tallennukset Google Sheetsiin
+      function tallennaParametrit() {
+        const sanatString = parametritTaulukko.join(', ');
+        google.script.run
+          .withSuccessHandler(() => naytaIlmoitus("Parametrisanat tallennettu!", "success"))
+          .withFailureHandler((err) => naytaIlmoitus("Virhe: " + err.message, "error"))
+          .tallennaYksittainenTieto("parametri", sanatString);
+      }
+
+      function tallennaSahkopostit() {
+        const spostitString = sahkopostitTaulukko.join(', ');
+        google.script.run
+          .withSuccessHandler(() => naytaIlmoitus("Sähköpostit tallennettu!", "success"))
+          .withFailureHandler((err) => naytaIlmoitus("Virhe: " + err.message, "error"))
+          .tallennaYksittainenTieto("sahkoposti", spostitString);
+      }
+
+      function vaihdaTila() {
+        const kytkin = document.getElementById('tilaKytkin');
+        const submitBtn = document.getElementById('submitBtn');
+        const tilaTeksti = document.getElementById('tilaTeksti');
+
+        sovellusPaalla = kytkin.checked;
+        tilaTeksti.textContent = sovellusPaalla ? 'PÄÄLLÄ' : 'POIS PÄÄLTÄ';
+        submitBtn.disabled = !sovellusPaalla;
+      }
+
+      function paivitaTiedosto(files) {
+        if (files.length > 0) {
+          document.getElementById('dropZoneTeksti').innerHTML = "📄 <strong>Valittu: " + files[0].name + "</strong>";
+        }
+      }
+
+      function kaynnistaSovellus() {
+        if (!sovellusPaalla) return;
+
+        const formData = {
+          parametrit: parametritTaulukko.join(', '),
+          sahkoposti: sahkopostitTaulukko.join(', '),
+          linkki: document.getElementById('linkki').value,
+          tila: sovellusPaalla ? 'PÄÄLLÄ' : 'POIS PÄÄLTÄ'
+        };
+
+        google.script.run
+          .withSuccessHandler(() => naytaIlmoitus("Kaikki tiedot tallennettu Sheetsiin!", "success"))
+          .withFailureHandler((err) => naytaIlmoitus("Virhe: " + err.message, "error"))
+          .prosessoiTiedot(formData);
+      }
+
+      function naytaIlmoitus(teksti, tyyppi) {
+        const ilmoitus = document.getElementById('ilmoitus');
+        ilmoitus.className = tyyppi;
+        ilmoitus.textContent = teksti;
+        ilmoitus.style.display = 'block';
+        setTimeout(() => { ilmoitus.style.display = 'none'; }, 4000);
+      }
+
+      function tallennaOhjeet() {
+        const ohjeet = document.getElementById('ohjeetAgentille').value;
+        google.script.run
+          .withSuccessHandler(() => naytaIlmoitus("Ohjeet tallennettu Sheetsiin!", "success"))
+          .withFailureHandler((err) => naytaIlmoitus("Virhe: " + err.message, "error"))
+          .tallennaYksittainenTieto("ohjeet", ohjeet);
+      }
+    </script>
+  </body>
+</html>
