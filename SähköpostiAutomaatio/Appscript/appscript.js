@@ -101,6 +101,10 @@ function lahetaIlmoitusSahkopostiin(uudetHaut) {
 
   MailApp.sendEmail(kayttajanSposti, aihe, viesti);
 }
+// Voit syöttää tähän pilkulla eroteltuna kaikki vastaanottajat: (LISÄTTY TULEVAISUUTTA VARTEN)
+// const vastaanottajat = "oma.osoite@gmail.com, ryhmalainen@gmail.com";
+
+// MailApp.sendEmail(vastaanottajat, aihe, viesti);
 
 /**
  * DATAN HAKUAPUFUNKTIOT
