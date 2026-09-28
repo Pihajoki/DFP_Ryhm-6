@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body { font-family: Arial, sans-serif; padding: 15px; color: #333; }
+      h3 { margin-top: 0; color: #1a73e8; }
+      label { font-weight: bold; font-size: 13px; display: block; margin-top: 12px; }
+      textarea { width: 100%; height: 140px; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: monospace; }
+      .ohje { font-size: 11px; color: #666; margin-top: 2px; }
+      .nappi-ryhma { margin-top: 20px; text-align: right; }
+      button { background-color: #1a73e8; color: white; border: none; padding: 10px 18px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+      button:hover { background-color: #1557b0; }
+      #viesti { margin-top: 10px; font-weight: bold; color: #0d904f; }
+    </style>
+  </head>
+  <body>
+    <h3>⚙️ Muokkaa Hakukriteereitä</h3>
+    
+    <label for="avainsanat">Kiinnostavat Avainsanat (1 per rivi):</label>
+    <textarea id="avainsanat" placeholder="Kirjoita avainsanat allekkaain..."></textarea>
+    <div class="ohje">Huom: Lyhyet 2-3 kirjaimen sanat (esim. vr, ar, ai) muotoillaan automaattisesti välilyönnein.</div>
+
+    <label for="spostit">Ilmoitus-Sähköpostit (1 per rivi):</label>
+    <textarea id="spostit" placeholder="esim. oma@email.com"></textarea>
+
+    <div id="viesti"></div>
+
+    <div class="nappi-ryhma">
+      <button onclick="tallenna()">💾 Tallenna Asetukset</button>
+    </div>
+
+    <script>
+      // Haetaan nykyiset tiedot kun ikkuna avautuu
+      window.onload = function() {
+        google.script.run.withSuccessHandler(function(data) {
+          document.getElementById('avainsanat').value = data.avainsanat;
+          document.getElementById('spostit').value = data.spostit;
+        }).haeAsetuksetPopupiin();
+      };
+
+      // Tallennusfunktio
+      function tallenna() {
+        var sanat = document.getElementById('avainsanat').value;
+        var spostit = document.getElementById('spostit').value;
+        document.getElementById('viesti').innerText = "Tallennetaan...";
+
+        google.script.run.withSuccessHandler(function(vastaus) {
+          document.getElementById('viesti').innerText = vastaus;
+          setTimeout(function() {
+            google.script.host.close(); // Sulkee ikkunan 1.5 sekunnin kuluttua
+          }, 1500);
+        }).tallennaAsetuksetPopupista(sanat, spostit);
+      }
+    </script>
+  </body>
+</html>
