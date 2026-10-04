@@ -3,54 +3,358 @@
   <head>
     <base target="_top">
     <style>
-      body { font-family: Arial, sans-serif; padding: 15px; color: #333; }
-      h3 { margin-top: 0; color: #1a73e8; }
-      label { font-weight: bold; font-size: 13px; display: block; margin-top: 12px; }
-      textarea { width: 100%; height: 140px; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: monospace; }
-      .ohje { font-size: 11px; color: #666; margin-top: 2px; }
-      .nappi-ryhma { margin-top: 20px; text-align: right; }
-      button { background-color: #1a73e8; color: white; border: none; padding: 10px 18px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-      button:hover { background-color: #1557b0; }
-      #viesti { margin-top: 10px; font-weight: bold; color: #0d904f; }
+      body {
+        font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+        background-color: #e2e2e2;
+        margin: 0;
+        padding: 15px;
+        color: #1a1a1a;
+      }
+      .header-logo {
+        font-size: 11px;
+        font-weight: bold;
+        color: #7a7a7a;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .logo-icon {
+        width: 24px;
+        height: 24px;
+        background-color: #5c8b43;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .card {
+        background-color: #83a070;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      }
+      .card-title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+      h2 {
+        margin: 0;
+        font-size: 18px;
+        color: #111;
+        font-weight: 600;
+        text-align: center;
+        flex-grow: 1;
+      }
+      .toggle-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 38px;
+        height: 20px;
+      }
+      .switch input { opacity: 0; width: 0; height: 0; }
+      .slider {
+        position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+        background-color: #ccc; transition: .3s; border-radius: 20px;
+      }
+      .slider:before {
+        position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px;
+        background-color: white; transition: .3s; border-radius: 50%;
+      }
+      input:checked + .slider { background-color: #008744; }
+      input:checked + .slider:before { transform: translateX(18px); }
+
+      .section-label {
+        font-size: 12px;
+        font-weight: bold;
+        margin-top: 10px;
+        margin-bottom: 4px;
+        color: #1a1a1a;
+      }
+
+      .tag-box {
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 6px 10px;
+        min-height: 38px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+        box-sizing: border-box;
+      }
+      .tag-box input {
+        border: none;
+        outline: none;
+        font-size: 13px;
+        flex-grow: 1;
+        min-width: 100px;
+        background: transparent;
+      }
+      .tag {
+        background-color: #2d6a4f;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 16px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .tag .close {
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .text-input-box input {
+        width: 100%;
+        border: none;
+        outline: none;
+        font-size: 13px;
+        padding: 10px;
+        border-radius: 12px;
+        box-sizing: border-box;
+      }
+
+      .checkbox-group {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        font-size: 12px;
+        font-weight: bold;
+        margin-top: 4px;
+      }
+      .checkbox-group label {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+      }
+
+      .status-box {
+        margin-top: 15px;
+        font-size: 12px;
+        color: #111;
+      }
+      .status-box .icon { color: #1a1a1a; margin-right: 4px; }
+
+      .btn-container {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .main-btn {
+        background-color: #c4c4c4;
+        color: #111;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        transition: background-color 0.2s;
+      }
+      .main-btn:hover { background-color: #b0b0b0; }
     </style>
   </head>
   <body>
-    <h3>⚙️ Muokkaa Hakukriteereitä</h3>
-    
-    <label for="avainsanat">Kiinnostavat Avainsanat (1 per rivi):</label>
-    <textarea id="avainsanat" placeholder="Kirjoita avainsanat allekkaain..."></textarea>
-    <div class="ohje">Huom: Lyhyet 2-3 kirjaimen sanat (esim. vr, ar, ai) muotoillaan automaattisesti välilyönnein.</div>
 
-    <label for="spostit">Ilmoitus-Sähköpostit (1 per rivi):</label>
-    <textarea id="spostit" placeholder="esim. oma@email.com"></textarea>
+    <div class="header-logo">
+      <span class="logo-icon"></span>
+      SUOMEN eOPPIMISKESKUS RY
+    </div>
 
-    <div id="viesti"></div>
+    <div class="card">
+      <div class="card-title-row">
+        <h2>Automaattinen Hakemusvahti</h2>
+        <div class="toggle-wrapper">
+          <span>Tila: <strong id="tilaTeksti">PÄÄLLÄ</strong></span>
+          <label class="switch">
+            <input type="checkbox" id="tilaKytkin" checked onchange="paivitaTilaTeksti()">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
 
-    <div class="nappi-ryhma">
-      <button onclick="tallenna()">💾 Tallenna Asetukset</button>
+      <!-- Hakusanat -->
+      <div class="section-label">Hakusanat</div>
+      <div class="tag-box" id="hakusanatContainer" onclick="tarkennaInput('hakusanaInput')">
+        <input type="text" id="hakusanaInput" placeholder="Lisää hakusana..." onkeydown="lisaaTagi(event, 'hakusanatContainer', 'hakusanaInput')">
+      </div>
+
+      <!-- Poissuljettavat -->
+      <div class="section-label">Poissuljettavat</div>
+      <div class="tag-box" id="poissuljetutContainer" onclick="tarkennaInput('poissuljeInput')">
+        <input type="text" id="poissuljeInput" placeholder="Lisää poissuljettava sana..." onkeydown="lisaaTagi(event, 'poissuljetutContainer', 'poissuljeInput')">
+      </div>
+
+      <!-- Sähköpostiosoitteet -->
+      <div class="section-label">Sähköpostiosoitteet</div>
+      <div class="text-input-box">
+        <input type="text" id="spostiInput" placeholder="esim. testi.testi@testi.com">
+      </div>
+
+      <!-- Hakutyyppi -->
+      <div class="section-label">Hakutyyppi</div>
+      <div class="checkbox-group">
+        <label><input type="checkbox" id="htRahoitushaku" checked> Rahoitushaku</label>
+        <label><input type="checkbox" id="htAvustukset"> Avustukset</label>
+      </div>
+
+      <!-- Rahoittajat -->
+      <div class="section-label">Rahoittajat</div>
+      <div class="checkbox-group">
+        <label><input type="checkbox" id="rahEU" checked> EU</label>
+        <label><input type="checkbox" id="rahOPH"> OPH</label>
+        <label><input type="checkbox" id="rahELY"> ELY</label>
+        <label><input type="checkbox" id="rahMUUT"> MUUT</label>
+      </div>
+
+      <!-- Haku sivustot -->
+      <div class="section-label">Haku sivustot</div>
+      <div class="checkbox-group">
+        <label><input type="checkbox" id="sivHaeavustuksia" checked> Haeavustuksia.fi</label>
+        <label><input type="checkbox" id="sivRakennerahastot" checked> Rakennerahastot</label>
+      </div>
+
+      <!-- Ilmoitukset ja tila -->
+      <div class="section-label">Ilmoitukset</div>
+      <div class="status-box">
+        <div><span class="icon">★</span><span id="edellinenTilaTeksti">Edellinen haku tehty onnistuneesti!</span></div>
+        <div style="margin-left: 18px; font-size: 11px; color: #333;" id="edellinenAikaTeksti">-</div>
+      </div>
+
+      <div class="btn-container">
+        <button class="main-btn" onclick="tallennaJaAja()">Hae uusia hakemuksia nyt</button>
+      </div>
     </div>
 
     <script>
-      // Haetaan nykyiset tiedot kun ikkuna avautuu
+      let hakusanat = [];
+      let poissuljetut = [];
+
       window.onload = function() {
-        google.script.run.withSuccessHandler(function(data) {
-          document.getElementById('avainsanat').value = data.avainsanat;
-          document.getElementById('spostit').value = data.spostit;
-        }).haeAsetuksetPopupiin();
+        google.script.run.withSuccessHandler(alustaUIRahasta).haeKaikkiAsetuksetUI();
       };
 
-      // Tallennusfunktio
-      function tallenna() {
-        var sanat = document.getElementById('avainsanat').value;
-        var spostit = document.getElementById('spostit').value;
-        document.getElementById('viesti').innerText = "Tallennetaan...";
+      function paivitaTilaTeksti() {
+        const kytkin = document.getElementById('tilaKytkin');
+        document.getElementById('tilaTeksti').innerText = kytkin.checked ? "PÄÄLLÄ" : "POIS";
+      }
 
-        google.script.run.withSuccessHandler(function(vastaus) {
-          document.getElementById('viesti').innerText = vastaus;
-          setTimeout(function() {
-            google.script.host.close(); // Sulkee ikkunan 1.5 sekunnin kuluttua
-          }, 1500);
-        }).tallennaAsetuksetPopupista(sanat, spostit);
+      function alustaUIRahasta(data) {
+        document.getElementById('tilaKytkin').checked = data.tila;
+        paivitaTilaTeksti();
+
+        hakusanat = data.hakusanat || [];
+        poissuljetut = data.poissuljetut || [];
+        paivitaTägit('hakusanatContainer', 'hakusanaInput', hakusanat);
+        paivitaTägit('poissuljetutContainer', 'poissuljeInput', poissuljetut);
+
+        document.getElementById('spostiInput').value = (data.spostit || []).join(", ");
+
+        document.getElementById('htRahoitushaku').checked = data.hakutyyppi.rahoitushaku;
+        document.getElementById('htAvustukset').checked = data.hakutyyppi.avustukset;
+
+        document.getElementById('rahEU').checked = data.rahoittajat.eu;
+        document.getElementById('rahOPH').checked = data.rahoittajat.oph;
+        document.getElementById('rahELY').checked = data.rahoittajat.ely;
+        document.getElementById('rahMUUT').checked = data.rahoittajat.muut;
+
+        document.getElementById('sivHaeavustuksia').checked = data.sivustot.haeavustuksia;
+        document.getElementById('sivRakennerahastot').checked = data.sivustot.rakennerahastot;
+
+        if (data.edellinenAika) {
+          document.getElementById('edellinenAikaTeksti').innerText = data.edellinenAika;
+        }
+      }
+
+      function lisaaTagi(event, containerId, inputId) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          const input = document.getElementById(inputId);
+          const val = input.value.trim();
+          if (val) {
+            if (containerId === 'hakusanatContainer') {
+              hakusanat.push(val);
+              paivitaTägit(containerId, inputId, hakusanat);
+            } else {
+              poissuljetut.push(val);
+              paivitaTägit(containerId, inputId, poissuljetut);
+            }
+            input.value = '';
+          }
+        }
+      }
+
+      function poistaTagi(index, containerId, inputId) {
+        if (containerId === 'hakusanatContainer') {
+          hakusanat.splice(index, 1);
+          paivitaTägit(containerId, inputId, hakusanat);
+        } else {
+          poissuljetut.splice(index, 1);
+          paivitaTägit(containerId, inputId, poissuljetut);
+        }
+      }
+
+      function paivitaTägit(containerId, inputId, taulukko) {
+        const container = document.getElementById(containerId);
+        const inputElem = document.getElementById(inputId);
+        container.innerHTML = '';
+        
+        taulukko.forEach((sana, idx) => {
+          const tag = document.createElement('div');
+          tag.className = 'tag';
+          tag.innerHTML = `${sana} <span class="close" onclick="poistaTagi(${idx}, '${containerId}', '${inputId}')">&times;</span>`;
+          container.appendChild(tag);
+        });
+
+        container.appendChild(inputElem);
+      }
+
+      function tarkennaInput(inputId) {
+        document.getElementById(inputId).focus();
+      }
+
+      function tallennaJaAja() {
+        const asetukset = {
+          tila: document.getElementById('tilaKytkin').checked,
+          hakusanat: hakusanat,
+          poissuljetut: poissuljetut,
+          spostit: document.getElementById('spostiInput').value.split(',').map(s => s.trim()).filter(Boolean),
+          hakutyyppi: {
+            rahoitushaku: document.getElementById('htRahoitushaku').checked,
+            avustukset: document.getElementById('htAvustukset').checked
+          },
+          rahoittajat: {
+            eu: document.getElementById('rahEU').checked,
+            oph: document.getElementById('rahOPH').checked,
+            ely: document.getElementById('rahELY').checked,
+            muut: document.getElementById('rahMUUT').checked
+          },
+          sivustot: {
+            haeavustuksia: document.getElementById('sivHaeavustuksia').checked,
+            rakennerahastot: document.getElementById('sivRakennerahastot').checked
+          }
+        };
+
+        document.getElementById('edellinenTilaTeksti').innerText = "Suoritetaan hakua...";
+        google.script.run
+          .withSuccessHandler(function(vastaus) {
+            document.getElementById('edellinenTilaTeksti').innerText = vastaus.viesti;
+            document.getElementById('edellinenAikaTeksti').innerText = vastaus.aika;
+          })
+          .tallennaAsetuksetJaAjaHaku(asetukset);
       }
     </script>
   </body>

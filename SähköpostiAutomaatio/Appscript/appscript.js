@@ -2,182 +2,138 @@
 // 1. KÄYTTÖLIITTYMÄ JA YLÄVALIKKO
 // =================================================================
 
-/**
- * Luo ylävalikon Google Sheetsiin, kun taulukko avataan
- */
 function onOpen() {
-  SpreadsheetApp.getUi()
-    .createMenu('⚙️ Rahoitusautomaatti')
-    .addItem('Avaa Asetukset (Pop-up)', 'avaaAsetuksetPopup')
-    .addItem('Suorita haku nyt', 'ajaRahoitushakuKayttoliittymalla')
-    .addToUi();
+  try {
+    const ui = SpreadsheetApp.getUi();
+    if (ui) {
+      ui.createMenu('⚙️ Rahoitusautomaatti')
+        .addItem('Avaa Hakemusvahti', 'avaaAsetuksetPopup')
+        .addItem('Suorita haku nyt', 'ajaRahoitushakuKayttoliittymalla')
+        .addToUi();
+    }
+  } catch (e) {}
 }
 
-/**
- * Avaa HTML-pohjaisen Pop-up ikkunan
- */
 function avaaAsetuksetPopup() {
-  const html = HtmlService.createHtmlOutputFromFile('AsetuksetUI')
-      .setWidth(500)
-      .setHeight(550)
-      .setTitle('⚙️ Rahoitusautomaatin Asetukset');
-  SpreadsheetApp.getUi().showModalDialog(html, '⚙️ Rahoitusautomaatin Asetukset');
+  try {
+    const html = HtmlService.createHtmlOutputFromFile('AsetuksetUI')
+        .setWidth(460)
+        .setHeight(640)
+        .setTitle('Automaattinen Hakemusvahti');
+    SpreadsheetApp.getUi().showModalDialog(html, 'Automaattinen Hakemusvahti');
+  } catch (e) {
+    Logger.log("Pop-upia ei voitu avata: " + e.toString());
+  }
 }
 
-/**
- * Haetaan nykyiset asetukset Pop-up ikkunaa varten
- */
-function haeAsetuksetPopupiin() {
+function haeKaikkiAsetuksetUI() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const asetukset = lueAsetuksetSheetsista(ss);
+  let sheet = ss.getSheetByName("Asetukset");
+
+  if (!sheet) {
+    sheet = ss.insertSheet("Asetukset");
+    alustaAsetusTaulukko(sheet);
+  }
+
   return {
-    avainsanat: asetukset.avainsanat.join("\n"),
-    spostit: asetukset.spostit.join("\n")
+    tila: sheet.getRange("B1").getValue() !== "POIS",
+    hakusanat: luePuhdasLista(sheet, "A", 2),
+    spostit: luePuhdasLista(sheet, "C", 2),
+    hakutyyppi: { rahoitushaku: true, avustukset: true },
+    rahoittajat: { eu: true, oph: true, ely: true, muut: true },
+    sivustot: { haeavustuksia: true, rakennerahastot: true },
+    edellinenAika: sheet.getRange("G2").getValue() || "-"
   };
 }
 
-/**
- * Tallentaa Pop-up ikkunasta lähetetyt uudet asetukset Sheetsiin
- */
-function tallennaAsetuksetPopupista(uudetSanatTeksti, uudetSpostitTeksti) {
+function tallennaAsetuksetJaAjaHaku(a) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = ss.getSheetByName("Asetukset");
   if (!sheet) {
     sheet = ss.insertSheet("Asetukset");
   }
-  
-  sheet.clear();
-  sheet.getRange("A1").setValue("Kiinnostavat Avainsanat").setFontWeight("bold").setBackground("#c9daf8");
-  sheet.getRange("B1").setValue("Ilmoitus-Sähköpostit").setFontWeight("bold").setBackground("#d9ead3");
 
-  const sanatRivit = uudetSanatTeksti.split("\n").map(s => [s.trim()]).filter(s => s[0] !== "");
-  const spostitRivit = uudetSpostitTeksti.split("\n").map(s => [s.trim()]).filter(s => s[0] !== "");
+  sheet.getRange("A2:A100").clearContent();
+  sheet.getRange("C2:C100").clearContent();
 
-  if (sanatRivit.length > 0) {
-    sheet.getRange(2, 1, sanatRivit.length, 1).setValues(sanatRivit);
+  sheet.getRange("B1").setValue(a.tila ? "PÄÄLLÄ" : "POIS");
+
+  kirjoitaLista(sheet, "A", 2, a.hakusanat);
+  kirjoitaLista(sheet, "C", 2, a.spostit);
+
+  const nyt = new Date();
+  const aikaStr = nyt.toLocaleDateString("fi-FI") + " / klo " + nyt.toLocaleTimeString("fi-FI", {hour: '2-digit', minute:'2-digit'});
+  sheet.getRange("G2").setValue(aikaStr);
+
+  let tulosViesti = "Asetukset tallennettu!";
+  if (a.tila) {
+    tulosViesti = ajaRahoitushakuKayttoliittymalla();
   }
-  if (spostitRivit.length > 0) {
-    sheet.getRange(2, 2, spostitRivit.length, 1).setValues(spostitRivit);
-  }
 
-  sheet.autoResizeColumns(1, 2);
-  return "✅ Asetukset tallennettu!";
+  return { viesti: tulosViesti, aika: aikaStr };
 }
 
 // =================================================================
-// 2. HAKUAUTOMAATTI JA LOGIIKKA
+// 2. PÄÄFUNKTIO JA HAKUAUTOMAATTI
 // =================================================================
 
-/**
- * PÄÄFUNKTIO: Lukee asetukset taulukosta, suorittaa haut ja lähettää ilmoitukset
- */
 function ajaRahoitushakuKayttoliittymalla() {
-  Logger.log("=== ALOITETAAN HAKU TARKIN SANARAJOIN ===");
-  
-  let ss = SpreadsheetApp.getActiveSpreadsheet();
-  if (!ss) {
-    ss = SpreadsheetApp.create("Rahoitusautomaatti_Dashboard");
-  }
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
 
-  const asetukset = lueAsetuksetSheetsista(ss);
-  
-  if (asetukset.avainsanat.length === 0) {
-    Browser.msgBox("⚠️ Ei avainsanoja!", "Lisää ainakin yksi avainsana 'Asetukset'-välilehdelle tai Pop-up ikkunaan.", Browser.Buttons.OK);
-    return;
-  }
+  const asetuksetUI = haeKaikkiAsetuksetUI();
 
-  Logger.log("Käytössä olevat avainsanat (" + asetukset.avainsanat.length + " kpl): " + asetukset.avainsanat.join(", "));
+  Logger.log("Ajettaessa UI-hakua, luetut hakusanat: " + JSON.stringify(asetuksetUI.hakusanat));
+
+  if (!asetuksetUI.tila) return "Haku kytketty POIS päältä.";
+  if (!asetuksetUI.hakusanat || asetuksetUI.hakusanat.length === 0) return "⚠️ Ei hakusanoja valittuna.";
 
   let uudetHautYhteensa = [];
 
-  // Haeavustuksia.fi
-  let uudetHaeavustuksia = kasitteleUudetHaut(ss, "Haeavustuksia.fi", haeHaeavustuksiaData(asetukset.avainsanat));
+  // 1. Haeavustuksia.fi
+  let rawHaeavustuksia = haeHaeavustuksiaData(asetuksetUI.hakusanat);
+  Logger.log("Haeavustuksia raaka-osumat yhteensä: " + rawHaeavustuksia.length);
+  let uudetHaeavustuksia = kasitteleUudetHaut(ss, "Haeavustuksia.fi", rawHaeavustuksia);
   uudetHautYhteensa = uudetHautYhteensa.concat(uudetHaeavustuksia);
 
-  // Rakennerahastot.fi
-  let uudetRakennerahastot = kasitteleUudetHaut(ss, "Rakennerahastot", haeRakennerahastotData(asetukset.avainsanat));
+  // 2. Rakennerahastot.fi
+  let rawRakennerahastot = haeRakennerahastotData(asetuksetUI.hakusanat);
+  let uudetRakennerahastot = kasitteleUudetHaut(ss, "Rakennerahastot", rawRakennerahastot);
   uudetHautYhteensa = uudetHautYhteensa.concat(uudetRakennerahastot);
 
-  // SÄHKÖPOSTI-ILMOITUS
-  if (uudetHautYhteensa.length > 0 && asetukset.spostit.length > 0) {
-    lahetaIlmoitus(asetukset.spostit.join(","), uudetHautYhteensa);
-    Logger.log("📧 Ilmoitus lähetetty osoitteisiin: " + asetukset.spostit.join(", "));
-  } else if (uudetHautYhteensa.length === 0) {
-    Logger.log("ℹ️ Ei uusia hankkeita tällä ajokerralla.");
-  } else {
-    Logger.log("⚠️ Uusia hankkeita löytyi, mutta sähköpostiosoitetta ei ollut määritelty Asetukset-sivulla.");
-  }
-}
-
-/**
- * LUKEE ASETUKSET TAULUKOSTA (Luodaan oletuksilla, jos ei löydy)
- */
-function lueAsetuksetSheetsista(ss) {
-  let sheet = ss.getSheetByName("Asetukset");
-  
-  if (!sheet) {
-    sheet = ss.insertSheet("Asetukset");
-    
-    sheet.getRange("A1").setValue("Kiinnostavat Avainsanat").setFontWeight("bold").setBackground("#c9daf8");
-    sheet.getRange("B1").setValue("Ilmoitus-Sähköpostit").setFontWeight("bold").setBackground("#d9ead3");
-    
-    const asiakkaanSanat = [
-      ["koulutus"], ["valmennus"], ["fasilitointi"], ["opetus"], ["ohjaus"],
-      ["selvitys"], ["ennakointi"], ["tulevaisuus"], ["innovaatio"], ["uusi teknologia"],
-      ["uudet teknologiat"], ["tekoäly"], [" ai "], ["robotiikka"], ["drooni"],
-      ["droni"], ["dronet"], [" vr "], [" ar "], [" xr "], ["älylasit"],
-      ["digitaaliset kaksoset"], ["digitaalinen kaksonen"], ["datan hyödyntäminen"],
-      ["dataohjautuvuus"], ["analytiikka"], ["oppimisanalytiikka"], ["osaaminen"],
-      ["osaamisen kehittäminen"], ["liiketoimintaosaaminen"], ["competence"],
-      ["skills development"], ["digital competence"]
-    ];
-
-    const oletusSposti = [[Session.getActiveUser().getEmail()]];
-    
-    sheet.getRange(2, 1, asiakkaanSanat.length, 1).setValues(asiakkaanSanat);
-    sheet.getRange(2, 2, 1, 1).setValues(oletusSposti);
-    sheet.autoResizeColumns(1, 2);
-  }
-
-  const raakaAvainsanat = sheet.getRange("A2:A" + Math.max(sheet.getLastRow(), 2)).getValues();
-  let avainsanat = [];
-  raakaAvainsanat.forEach(r => {
-    if (r[0] && String(r[0]).trim() !== "") {
-      let val = String(r[0]).toLowerCase();
-      if (val.trim().length <= 3 && !val.startsWith(" ") && !val.endsWith(" ")) {
-        val = " " + val.trim() + " ";
-      }
-      avainsanat.push(val);
+  // 3. SÄHKÖPOSTI-ILMOITUS
+  if (asetuksetUI.spostit.length > 0) {
+    if (uudetHautYhteensa.length > 0) {
+      lahetaIlmoitus(asetuksetUI.spostit.join(","), uudetHautYhteensa);
+      return `✅ Löytyi ${uudetHautYhteensa.length} uutta hakua! Sähköposti lähetetty.`;
+    } else {
+      return "Haku suoritettu: Ei uusia hakuja.";
     }
-  });
-
-  const raakaSpostit = sheet.getRange("B2:B" + Math.max(sheet.getLastRow(), 2)).getValues();
-  let spostit = [];
-  raakaSpostit.forEach(r => {
-    if (r[0] && String(r[0]).trim() !== "") spostit.push(String(r[0]).trim());
-  });
-
-  return { avainsanat: avainsanat, spostit: spostit };
+  } else {
+    return "⚠️ Haku tehty, mutta sähköpostiosoitetta ei ole asetettu!";
+  }
 }
 
-/**
- * TARKISTAFUNKTIO: Sanarajat tunnistava suodatin
- */
-function onkoKiinnostava(teksti, avainsanat) {
+// =================================================================
+// 3. HAKULOGIIKKA JA DUPLIKAATTIKÄSITTELY
+// =================================================================
+
+function onkoKiinnostava(teksti, hakusanat) {
   if (!teksti) return null;
   
-  const matalaTeksti = " " + String(teksti).toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, " ") + " ";
+  const rawTeksti = String(teksti).toLowerCase();
+  const siivottuTeksti = " " + rawTeksti.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, " ") + " ";
 
-  for (let i = 0; i < avainsanat.length; i++) {
-    const sana = avainsanat[i];
-    
-    if (sana.startsWith(" ") || sana.endsWith(" ")) {
-      if (matalaTeksti.includes(sana)) {
-        return sana.trim();
+  for (let i = 0; i < hakusanat.length; i++) {
+    let sana = String(hakusanat[i]).toLowerCase().trim();
+    if (!sana) continue;
+
+    if (sana.length <= 3) {
+      if (siivottuTeksti.includes(" " + sana + " ")) {
+        return sana;
       }
     } else {
-      if (matalaTeksti.includes(sana)) {
-        return sana.trim();
+      if (rawTeksti.includes(sana)) {
+        return sana;
       }
     }
   }
@@ -185,82 +141,143 @@ function onkoKiinnostava(teksti, avainsanat) {
   return null;
 }
 
-/**
- * DUPLIKAATTISUOJA: Tallentaa vain uudet rivit
- */
 function kasitteleUudetHaut(ss, sheetNimi, haetutHaut) {
+  if (!ss) ss = SpreadsheetApp.getActiveSpreadsheet();
+  
   let sheet = ss.getSheetByName(sheetNimi);
   if (!sheet) {
     sheet = ss.insertSheet(sheetNimi);
-    sheet.appendRow(["Koodi / ID", "Hakuilmoituksen Nimi", "Rahoittaja", "Hakuaika Päättyy", "Löytynyt Avainsana", "Suora Linkki", "Lisätty Taulukkoon"]);
+  }
+
+  sheet.clearContents();
+  sheet.clearFormats();
+
+  const otsikot = ["Koodi / ID", "Hakuilmoituksen Nimi", "Rahoittaja", "Hakuaika Päättyy", "Löytynyt Avainsana", "Suora Linkki", "Lisätty Taulukkoon"];
+  let kaikkiRivit = [otsikot];
+  let aiemmatTunnisteet = new Set();
+  const lisattyPvm = new Date().toLocaleDateString("fi-FI");
+
+  if (haetutHaut && haetutHaut.length > 0) {
+    haetutHaut.forEach(hanke => {
+      const tunniste = (String(hanke.nimi) + "_" + String(hanke.linkki)).toLowerCase().trim();
+      
+      if (!aiemmatTunnisteet.has(tunniste)) {
+        kaikkiRivit.push([
+          hanke.id || "VALTIO/EU",
+          hanke.nimi,
+          hanke.rahoittaja,
+          hanke.loppupvm || "-",
+          String(hanke.osumaSyy).toUpperCase(),
+          hanke.linkki,
+          lisattyPvm
+        ]);
+        aiemmatTunnisteet.add(tunniste);
+      }
+    });
+  }
+
+  if (kaikkiRivit.length > 0) {
+    sheet.getRange(1, 1, kaikkiRivit.length, 7).setValues(kaikkiRivit);
     sheet.getRange(1, 1, 1, 7).setFontWeight("bold").setBackground("#c9daf8");
+    
+    try {
+      sheet.autoResizeColumns(1, 7);
+    } catch(e) {}
   }
 
-  const data = sheet.getDataRange().getValues();
-  let aiemmatLinkit = new Set();
-  for (let i = 1; i < data.length; i++) {
-    if (data[i][5]) aiemmatLinkit.add(String(data[i][5]).trim());
-  }
+  SpreadsheetApp.flush();
 
-  let uudetRivit = [];
-  let uudetHautObj = [];
-
-  haetutHaut.forEach(hanke => {
-    if (!aiemmatLinkit.has(String(hanke.linkki).trim())) {
-      const lisattyPvm = new Date().toLocaleDateString("fi-FI");
-      uudetRivit.push([
-        hanke.id || "EU-HAKU",
-        hanke.nimi,
-        hanke.rahoittaja,
-        hanke.loppupvm || "-",
-        hanke.osumaSyy.toUpperCase(),
-        hanke.linkki,
-        lisattyPvm
-      ]);
-      uudetHautObj.push(hanke);
-    }
-  });
-
-  if (uudetRivit.length > 0) {
-    sheet.getRange(sheet.getLastRow() + 1, 1, uudetRivit.length, 7).setValues(uudetRivit);
-    sheet.autoResizeColumns(1, 7);
-    Logger.log(`✅ Lisättiin ${uudetRivit.length} uutta riviä sivuun '${sheetNimi}'.`);
-  }
-
-  return uudetHautObj;
+  return haetutHaut;
 }
 
 // =================================================================
-// 3. API- JA RAAPUTUSFUNKTIOT
+// 4. API- JA RAAPUTUSFUNKTIOT
 // =================================================================
 
-function haeHaeavustuksiaData(avainsanat) {
-  const apiUrl = "https://www.haeavustuksia.fi/api/haku/list-items?Pagination.Page=1&Pagination.PageSize=500&Language=fi&ShowFuture=true&ShowOngoing=true&ShowEnded=false";
+function haeHaeavustuksiaData(hakusanat) {
   let tulokset = [];
+  let sivu = 1;
+  let sivuKoko = 100;
+  let jatkaHakua = true;
+
   try {
-    const res = UrlFetchApp.fetch(apiUrl, { muteHttpExceptions: true });
-    if (res.getResponseCode() === 200) {
-      const data = JSON.parse(res.getContentText());
-      (data.hakuilmoitukset || []).forEach(item => {
-        let nimi = (typeof item.nimi === "object" && item.nimi !== null) ? (item.nimi.fi || "") : (item.nimi || "");
-        let osuma = onkoKiinnostava(nimi, avainsanat);
-        if (osuma) {
-          tulokset.push({
-            id: item.id || item.hakuId || "VALTIO",
-            nimi: nimi,
-            rahoittaja: item.jarjestajaNimi || "Valtio",
-            loppupvm: item.hakuaikaLoppu || "-",
-            linkki: item.id ? "https://www.haeavustuksia.fi/fi/haku/" + item.id : "https://www.haeavustuksia.fi",
-            osumaSyy: osuma
-          });
-        }
+    while (jatkaHakua) {
+      const apiUrl = `https://www.haeavustuksia.fi/api/haku/list-items?Pagination.Page=${sivu}&Pagination.PageSize=${sivuKoko}&Language=fi&ShowFuture=true&ShowOngoing=true&ShowEnded=false`;
+      const res = UrlFetchApp.fetch(apiUrl, { 
+        muteHttpExceptions: true,
+        headers: { "User-Agent": "Mozilla/5.0" }
       });
+      
+      if (res.getResponseCode() === 200) {
+        const data = JSON.parse(res.getContentText());
+        const ilmoitukset = data.hakuilmoitukset || data.items || [];
+        
+        if (!ilmoitukset || ilmoitukset.length === 0) {
+          jatkaHakua = false;
+          break;
+        }
+
+        ilmoitukset.forEach(item => {
+          let nimiTeksti = "";
+          
+          if (item.nimi) {
+            if (typeof item.nimi === "object") {
+              nimiTeksti = item.nimi.fi || item.nimi.sv || item.nimi.en || "";
+            } else {
+              nimiTeksti = String(item.nimi);
+            }
+          }
+
+          let osuma = onkoKiinnostava(nimiTeksti, hakusanat);
+          if (osuma) {
+            // Haeavustuksia.fi käyttää tunnistimena kenttää hakuasianAsianumero
+            const asianumero = item.hakuasianAsianumero || item.koodi || item.tunniste || item.id;
+            
+            let suoraLinkki = "https://www.haeavustuksia.fi";
+            if (asianumero) {
+              suoraLinkki = `https://www.haeavustuksia.fi/fi/haku/${asianumero}`;
+            }
+
+            // Rahoittajan nimi
+            let jarjestaja = "Valtio";
+            if (item.vastuullinenJarjestajaOrganisaatio) {
+              if (typeof item.vastuullinenJarjestajaOrganisaatio === "object") {
+                jarjestaja = item.vastuullinenJarjestajaOrganisaatio.fi || item.vastuullinenJarjestajaOrganisaatio.sv || "Valtio";
+              } else {
+                jarjestaja = String(item.vastuullinenJarjestajaOrganisaatio);
+              }
+            } else if (item.jarjestajaNimi) {
+              jarjestaja = item.jarjestajaNimi;
+            }
+
+            tulokset.push({
+              id: asianumero || "VALTIO",
+              nimi: nimiTeksti || "Nimetön haku",
+              rahoittaja: jarjestaja,
+              loppupvm: item.hakuPaattyyDateTimeUtc || item.hakuaikaLoppu || "-",
+              linkki: suoraLinkki,
+              osumaSyy: osuma
+            });
+          }
+        });
+
+        if (ilmoitukset.length < sivuKoko || sivu >= 10) {
+          jatkaHakua = false;
+        } else {
+          sivu++;
+        }
+      } else {
+        jatkaHakua = false;
+      }
     }
-  } catch (e) {}
+  } catch (e) {
+    Logger.log("Virhe Haeavustuksia.fi haussa: " + e.toString());
+  }
+
   return tulokset;
 }
 
-function haeRakennerahastotData(avainsanat) {
+function haeRakennerahastotData(hakusanat) {
   const url = "https://rakennerahastot.fi/hakuajat";
   let tulokset = [];
   try {
@@ -272,8 +289,8 @@ function haeRakennerahastotData(avainsanat) {
       while ((match = regex.exec(html)) !== null) {
         const href = match[1];
         const teksti = match[2].replace(/<[^>]+>/g, '').trim();
-        if (teksti.length > 10 && (href.includes("/haku") || href.includes("eura2021"))) {
-          let osuma = onkoKiinnostava(teksti, avainsanat);
+        if (teksti.length > 10 && (href.includes("/haku") || href.includes("eura2021") || href.includes("rakennerahastot"))) {
+          let osuma = onkoKiinnostava(teksti, hakusanat);
           if (osuma) {
             tulokset.push({
               id: "EU-HAKU",
@@ -287,15 +304,61 @@ function haeRakennerahastotData(avainsanat) {
         }
       }
     }
-  } catch (e) {}
+  } catch (e) {
+    Logger.log("Virhe Rakennerahastot.fi haussa: " + e.toString());
+  }
   return tulokset;
 }
 
 function lahetaIlmoitus(vastaanottajat, uudetHaut) {
   const aihe = `🚨 Uusia rahoitushakuja löytynyt (${uudetHaut.length} kpl)`;
-  let viesti = `Moi!\n\nAutomaatio löysi ${uudetHaut.length} uutta hakua:\n\n`;
+  let viesti = `Moi!\n\nAutomaattinen Hakemusvahti löysi ${uudetHaut.length} uutta hakua:\n\n`;
   uudetHaut.forEach((h, i) => {
     viesti += `${i + 1}. ${h.nimi}\n   - Avainsana: ${h.osumaSyy.toUpperCase()}\n   - Linkki: ${h.linkki}\n\n`;
   });
-  MailApp.sendEmail(vastaanottajat, aihe, viesti);
+  
+  try {
+    MailApp.sendEmail(vastaanottajat, aihe, viesti);
+  } catch(e) {
+    Logger.log("Virhe sähköpostin lähetyksessä: " + e.toString());
+  }
+}
+
+// =================================================================
+// 5. APUFUNKTIOT
+// =================================================================
+
+function alustaAsetusTaulukko(sheet) {
+  sheet.getRange("A1").setValue("Hakusanat").setFontWeight("bold");
+  sheet.getRange("B1").setValue("PÄÄLLÄ");
+  sheet.getRange("C1").setValue("Sähköpostit").setFontWeight("bold");
+  
+  kirjoitaLista(sheet, "A", 2, ["koulutus", "valmennus", "innovaatio"]);
+  
+  let sposti = "";
+  try { sposti = Session.getActiveUser().getEmail(); } catch(e) {}
+  if (sposti) kirjoitaLista(sheet, "C", 2, [sposti]);
+}
+
+function luePuhdasLista(sheet, sarakeKirjain, aloitusRivi) {
+  const maxRivi = Math.max(sheet.getLastRow(), aloitusRivi);
+  const arr = sheet.getRange(sarakeKirjain + aloitusRivi + ":" + sarakeKirjain + maxRivi).getValues();
+  let tulos = [];
+  arr.forEach(r => {
+    if (r[0] && String(r[0]).trim() !== "") {
+      tulos.push(String(r[0]).trim());
+    }
+  });
+  return tulos;
+}
+
+function kirjoitaLista(sheet, sarakeKirjain, aloitusRivi, dataArray) {
+  if (dataArray && dataArray.length > 0) {
+    const rivit = dataArray.map(item => [item]);
+    sheet.getRange(aloitusRivi, sarakeKirjaimestaNro(sarakeKirjain), rivit.length, 1).setValues(rivit);
+  }
+}
+
+function sarakeKirjaimestaNro(letter) {
+  return letter.charCodeAt(0) - 64;
 }
