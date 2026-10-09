@@ -4,355 +4,360 @@
     <base target="_top">
     <style>
       body {
-        font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
-        background-color: #e2e2e2;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background-color: #e0e0e0;
         margin: 0;
         padding: 15px;
-        color: #1a1a1a;
+        display: flex;
+        justify-content: center;
+      }
+      .container {
+        width: 100%;
+        max-width: 440px;
+        background-color: #e0e0e0;
+        border-radius: 16px;
       }
       .header-logo {
-        font-size: 11px;
-        font-weight: bold;
-        color: #7a7a7a;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 8px;
         display: flex;
         align-items: center;
         gap: 8px;
+        margin-bottom: 12px;
+        padding-left: 5px;
       }
       .logo-icon {
-        width: 24px;
-        height: 24px;
-        background-color: #5c8b43;
+        width: 32px;
+        height: 32px;
+        background-color: #7bb342;
         border-radius: 50%;
-        display: inline-block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
       }
-      .card {
-        background-color: #83a070;
+      .logo-text {
+        font-size: 11px;
+        color: #666;
+        line-height: 1.1;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+      .main-card {
+        background-color: #8fa87a;
         border-radius: 16px;
         padding: 20px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-      }
-      .card-title-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
+        color: #1a1a1a;
       }
       h2 {
-        margin: 0;
-        font-size: 18px;
-        color: #111;
-        font-weight: 600;
         text-align: center;
-        flex-grow: 1;
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-size: 18px;
+        color: #1a300d;
+        font-weight: 700;
       }
-      .toggle-wrapper {
+      .top-status {
         display: flex;
+        justify-content: flex-end;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
         font-size: 12px;
         font-weight: bold;
+        margin-bottom: 10px;
       }
+      /* Toggle switch */
       .switch {
         position: relative;
         display: inline-block;
-        width: 38px;
+        width: 40px;
         height: 20px;
       }
-      .switch input { opacity: 0; width: 0; height: 0; }
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
       .slider {
-        position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-        background-color: #ccc; transition: .3s; border-radius: 20px;
+        position: absolute;
+        cursor: pointer;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: #ccc;
+        transition: .3s;
+        border-radius: 20px;
       }
       .slider:before {
-        position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px;
-        background-color: white; transition: .3s; border-radius: 50%;
+        position: absolute;
+        content: "";
+        height: 14px; width: 14px;
+        left: 3px; bottom: 3px;
+        background-color: white;
+        transition: .3s;
+        border-radius: 50%;
       }
-      input:checked + .slider { background-color: #008744; }
-      input:checked + .slider:before { transform: translateX(18px); }
-
+      input:checked + .slider {
+        background-color: #00875a;
+      }
+      input:checked + .slider:before {
+        transform: translateX(20px);
+      }
+      
       .section-label {
-        font-size: 12px;
+        font-size: 13px;
         font-weight: bold;
-        margin-top: 10px;
-        margin-bottom: 4px;
+        margin-top: 12px;
+        margin-bottom: 6px;
         color: #1a1a1a;
       }
-
-      .tag-box {
+      .input-box {
         background-color: #ffffff;
-        border-radius: 12px;
-        padding: 6px 10px;
+        border-radius: 10px;
+        padding: 8px 12px;
         min-height: 38px;
         display: flex;
         flex-wrap: wrap;
         gap: 6px;
         align-items: center;
-        box-sizing: border-box;
-      }
-      .tag-box input {
-        border: none;
-        outline: none;
-        font-size: 13px;
-        flex-grow: 1;
-        min-width: 100px;
-        background: transparent;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
       }
       .tag {
         background-color: #2d6a4f;
         color: white;
-        padding: 4px 10px;
-        border-radius: 16px;
+        padding: 4px 12px;
+        border-radius: 15px;
         font-size: 12px;
+        font-weight: 600;
         display: flex;
         align-items: center;
         gap: 6px;
       }
-      .tag .close {
+      .tag-remove {
         cursor: pointer;
-        font-weight: bold;
-        font-size: 14px;
+        font-size: 10px;
+        opacity: 0.8;
       }
-
-      .text-input-box input {
-        width: 100%;
+      .tag-remove:hover {
+        opacity: 1;
+      }
+      .text-input {
         border: none;
         outline: none;
+        background: transparent;
         font-size: 13px;
-        padding: 10px;
-        border-radius: 12px;
-        box-sizing: border-box;
+        width: 100%;
+        color: #333;
       }
-
+      .text-input::placeholder {
+        color: #a0a0a0;
+      }
+      
       .checkbox-group {
         display: flex;
         gap: 15px;
         flex-wrap: wrap;
         font-size: 12px;
-        font-weight: bold;
+        font-weight: 600;
         margin-top: 4px;
       }
-      .checkbox-group label {
+      .checkbox-label {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 5px;
         cursor: pointer;
       }
 
-      .status-box {
+      .info-box {
         margin-top: 15px;
         font-size: 12px;
-        color: #111;
+        line-height: 1.3;
       }
-      .status-box .icon { color: #1a1a1a; margin-right: 4px; }
+      .info-title {
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
 
-      .btn-container {
-        text-align: center;
-        margin-top: 20px;
-      }
       .main-btn {
-        background-color: #c4c4c4;
-        color: #111;
+        width: 100%;
+        background-color: #cccccc;
+        color: #1a1a1a;
         border: none;
-        padding: 12px 24px;
-        border-radius: 12px;
+        padding: 12px;
+        border-radius: 8px;
         font-size: 14px;
         font-weight: bold;
+        margin-top: 20px;
         cursor: pointer;
         box-shadow: 0 2px 4px rgba(0,0,0,0.15);
         transition: background-color 0.2s;
       }
-      .main-btn:hover { background-color: #b0b0b0; }
+      .main-btn:hover {
+        background-color: #bebebe;
+      }
     </style>
   </head>
   <body>
 
-    <div class="header-logo">
-      <span class="logo-icon"></span>
-      SUOMEN eOPPIMISKESKUS RY
-    </div>
+    <div class="container">
+      <!-- LOGO OSIIO -->
+      <div class="header-logo">
+        <div class="logo-icon">e</div>
+        <div class="logo-text">SUOMEN<br>eOPPIMISKESKUS RY</div>
+      </div>
 
-    <div class="card">
-      <div class="card-title-row">
+      <!-- PÄÄKORTTI -->
+      <div class="main-card">
         <h2>Automaattinen Hakemusvahti</h2>
-        <div class="toggle-wrapper">
-          <span>Tila: <strong id="tilaTeksti">PÄÄLLÄ</strong></span>
+
+        <div class="top-status">
+          <span>Tila: <span id="tilaTeksti">PÄÄLLÄ</span></span>
           <label class="switch">
-            <input type="checkbox" id="tilaKytkin" checked onchange="paivitaTilaTeksti()">
+            <input type="checkbox" id="tilaKytkin" onchange="paivitaTilaTeksti()">
             <span class="slider"></span>
           </label>
         </div>
-      </div>
 
-      <!-- Hakusanat -->
-      <div class="section-label">Hakusanat</div>
-      <div class="tag-box" id="hakusanatContainer" onclick="tarkennaInput('hakusanaInput')">
-        <input type="text" id="hakusanaInput" placeholder="Lisää hakusana..." onkeydown="lisaaTagi(event, 'hakusanatContainer', 'hakusanaInput')">
-      </div>
+        <!-- HAKUSANAT -->
+        <div class="section-label">Hakusanat</div>
+        <div class="input-box" id="hakusanatContainer" onclick="focusInput('hakusanaInput')">
+          <input type="text" id="hakusanaInput" class="text-input" placeholder="Lisää hakusana ja paina Enter..." onkeydown="lisaaTagi(event, 'hakusanat')">
+        </div>
 
-      <!-- Poissuljettavat -->
-      <div class="section-label">Poissuljettavat</div>
-      <div class="tag-box" id="poissuljetutContainer" onclick="tarkennaInput('poissuljeInput')">
-        <input type="text" id="poissuljeInput" placeholder="Lisää poissuljettava sana..." onkeydown="lisaaTagi(event, 'poissuljetutContainer', 'poissuljeInput')">
-      </div>
+        <!-- POISSULJETTAVAT -->
+        <div class="section-label">Poissuljettavat</div>
+        <div class="input-box" id="poissulkevatContainer" onclick="focusInput('poissulkevaInput')">
+          <input type="text" id="poissulkevaInput" class="text-input" placeholder="Lisää hakusana ja paina Enter..." onkeydown="lisaaTagi(event, 'poissulkevat')">
+        </div>
 
-      <!-- Sähköpostiosoitteet -->
-      <div class="section-label">Sähköpostiosoitteet</div>
-      <div class="text-input-box">
-        <input type="text" id="spostiInput" placeholder="esim. testi.testi@testi.com">
-      </div>
+        <!-- SÄHKÖPOSTIT -->
+        <div class="section-label">Sähköpostiosoitteet</div>
+        <div class="input-box" id="spostitContainer" onclick="focusInput('spostiInput')">
+          <input type="text" id="spostiInput" class="text-input" placeholder="Lisää sähköposti ja paina Enter..." onkeydown="lisaaTagi(event, 'spostit')">
+        </div>
 
-      <!-- Hakutyyppi -->
-      <div class="section-label">Hakutyyppi</div>
-      <div class="checkbox-group">
-        <label><input type="checkbox" id="htRahoitushaku" checked> Rahoitushaku</label>
-        <label><input type="checkbox" id="htAvustukset"> Avustukset</label>
-      </div>
+        <!-- HAKUTYYPPI -->
+        <div class="section-label">Hakutyyppi</div>
+        <div class="checkbox-group">
+          <label class="checkbox-label"><input type="checkbox" id="htRahoitus" checked> Rahoitushaku</label>
+          <label class="checkbox-label"><input type="checkbox" id="htAvustukset"> Avustukset</label>
+        </div>
 
-      <!-- Rahoittajat -->
-      <div class="section-label">Rahoittajat</div>
-      <div class="checkbox-group">
-        <label><input type="checkbox" id="rahEU" checked> EU</label>
-        <label><input type="checkbox" id="rahOPH"> OPH</label>
-        <label><input type="checkbox" id="rahELY"> ELY</label>
-        <label><input type="checkbox" id="rahMUUT"> MUUT</label>
-      </div>
+        <!-- RAHOITTAJAT -->
+        <div class="section-label">Rahoittajat</div>
+        <div class="checkbox-group">
+          <label class="checkbox-label"><input type="checkbox" id="rEU" checked> EU</label>
+          <label class="checkbox-label"><input type="checkbox" id="rOPH"> OPH</label>
+          <label class="checkbox-label"><input type="checkbox" id="rELY"> ELY</label>
+          <label class="checkbox-label"><input type="checkbox" id="rMUUT"> MUUT</label>
+        </div>
 
-      <!-- Haku sivustot -->
-      <div class="section-label">Haku sivustot</div>
-      <div class="checkbox-group">
-        <label><input type="checkbox" id="sivHaeavustuksia" checked> Haeavustuksia.fi</label>
-        <label><input type="checkbox" id="sivRakennerahastot" checked> Rakennerahastot</label>
-      </div>
+        <!-- HAKU SIVUSTOT -->
+        <div class="section-label">Haku sivustot</div>
+        <div class="checkbox-group">
+          <label class="checkbox-label"><input type="checkbox" id="sEura" checked> Eura2021</label>
+          <label class="checkbox-label"><input type="checkbox" id="sRakenne" checked> Rakennerahastot</label>
+        </div>
 
-      <!-- Ilmoitukset ja tila -->
-      <div class="section-label">Ilmoitukset</div>
-      <div class="status-box">
-        <div><span class="icon">★</span><span id="edellinenTilaTeksti">Edellinen haku tehty onnistuneesti!</span></div>
-        <div style="margin-left: 18px; font-size: 11px; color: #333;" id="edellinenAikaTeksti">-</div>
-      </div>
+        <!-- ILMOITUKSET -->
+        <div class="section-label">Ilmoitukset</div>
+        <div class="info-box">
+          <div class="info-title">★ <span id="ilmoitusTeksti">Edellinen haku tehty onnistuneesti!</span></div>
+          <div style="padding-left: 15px;" id="aikaTeksti">1.1.2026 / klo 16:00</div>
+        </div>
 
-      <div class="btn-container">
-        <button class="main-btn" onclick="tallennaJaAja()">Hae uusia hakemuksia nyt</button>
+        <button class="main-btn" onclick="tallennaAsetukset()">Hae uusia hakemuksia nyt</button>
       </div>
     </div>
 
     <script>
-      let hakusanat = [];
-      let poissuljetut = [];
-
-      window.onload = function() {
-        google.script.run.withSuccessHandler(alustaUIRahasta).haeKaikkiAsetuksetUI();
+      let dataStore = {
+        hakusanat: ["koulutus", "valmennus"],
+        poissulkevat: [],
+        spostit: ["testi.testi@testi.com"]
       };
 
-      function paivitaTilaTeksti() {
-        const kytkin = document.getElementById('tilaKytkin');
-        document.getElementById('tilaTeksti').innerText = kytkin.checked ? "PÄÄLLÄ" : "POIS";
-      }
+      window.onload = function() {
+        google.script.run
+          .withSuccessHandler(alustaUI)
+          .haeKaikkiAsetuksetUI();
+      };
 
-      function alustaUIRahasta(data) {
-        document.getElementById('tilaKytkin').checked = data.tila;
-        paivitaTilaTeksti();
+      function alustaUI(a) {
+        if (a) {
+          document.getElementById("tilaKytkin").checked = a.tila;
+          paivitaTilaTeksti();
 
-        hakusanat = data.hakusanat || [];
-        poissuljetut = data.poissuljetut || [];
-        paivitaTägit('hakusanatContainer', 'hakusanaInput', hakusanat);
-        paivitaTägit('poissuljetutContainer', 'poissuljeInput', poissuljetut);
-
-        document.getElementById('spostiInput').value = (data.spostit || []).join(", ");
-
-        document.getElementById('htRahoitushaku').checked = data.hakutyyppi.rahoitushaku;
-        document.getElementById('htAvustukset').checked = data.hakutyyppi.avustukset;
-
-        document.getElementById('rahEU').checked = data.rahoittajat.eu;
-        document.getElementById('rahOPH').checked = data.rahoittajat.oph;
-        document.getElementById('rahELY').checked = data.rahoittajat.ely;
-        document.getElementById('rahMUUT').checked = data.rahoittajat.muut;
-
-        document.getElementById('sivHaeavustuksia').checked = data.sivustot.haeavustuksia;
-        document.getElementById('sivRakennerahastot').checked = data.sivustot.rakennerahastot;
-
-        if (data.edellinenAika) {
-          document.getElementById('edellinenAikaTeksti').innerText = data.edellinenAika;
+          if (a.hakusanat && a.hakusanat.length > 0) dataStore.hakusanat = a.hakusanat;
+          if (a.poissulkevat) dataStore.poissulkevat = a.poissulkevat;
+          if (a.spostit && a.spostit.length > 0) dataStore.spostit = a.spostit;
+          if (a.edellinenAika && a.edellinenAika !== "-") document.getElementById("aikaTeksti").innerText = a.edellinenAika;
         }
+        paivitaKaikkiTagit();
       }
 
-      function lisaaTagi(event, containerId, inputId) {
-        if (event.key === 'Enter') {
-          event.preventDefault();
-          const input = document.getElementById(inputId);
-          const val = input.value.trim();
-          if (val) {
-            if (containerId === 'hakusanatContainer') {
-              hakusanat.push(val);
-              paivitaTägit(containerId, inputId, hakusanat);
-            } else {
-              poissuljetut.push(val);
-              paivitaTägit(containerId, inputId, poissuljetut);
-            }
-            input.value = '';
+      function paivitaTilaTeksti() {
+        const isChecked = document.getElementById("tilaKytkin").checked;
+        document.getElementById("tilaTeksti").innerText = isChecked ? "PÄÄLLÄ" : "POIS";
+      }
+
+      function renderTags(type, containerId, inputId) {
+        const container = document.getElementById(containerId);
+        const input = document.getElementById(inputId);
+        
+        // Poistetaan vanhat tagit (säilytetään input)
+        const oldTags = container.querySelectorAll('.tag');
+        oldTags.forEach(t => t.remove());
+
+        dataStore[type].forEach((text, index) => {
+          const tag = document.createElement('div');
+          tag.className = 'tag';
+          tag.innerHTML = `${text} <span class="tag-remove" onclick="poistaTagi('${type}', ${index})">✕</span>`;
+          container.insertBefore(tag, input);
+        });
+      }
+
+      function paivitaKaikkiTagit() {
+        renderTags('hakusanat', 'hakusanatContainer', 'hakusanaInput');
+        renderTags('poissulkevat', 'poissulkevatContainer', 'poissulkevaInput');
+        renderTags('spostit', 'spostitContainer', 'spostiInput');
+      }
+
+      function lisaaTagi(e, type) {
+        if (e.key === 'Enter' || e.key === ',') {
+          e.preventDefault();
+          const val = e.target.value.trim();
+          if (val && !dataStore[type].includes(val)) {
+            dataStore[type].push(val);
+            e.target.value = '';
+            paivitaKaikkiTagit();
           }
         }
       }
 
-      function poistaTagi(index, containerId, inputId) {
-        if (containerId === 'hakusanatContainer') {
-          hakusanat.splice(index, 1);
-          paivitaTägit(containerId, inputId, hakusanat);
-        } else {
-          poissuljetut.splice(index, 1);
-          paivitaTägit(containerId, inputId, poissuljetut);
-        }
+      function poistaTagi(type, index) {
+        dataStore[type].splice(index, 1);
+        paivitaKaikkiTagit();
       }
 
-      function paivitaTägit(containerId, inputId, taulukko) {
-        const container = document.getElementById(containerId);
-        const inputElem = document.getElementById(inputId);
-        container.innerHTML = '';
-        
-        taulukko.forEach((sana, idx) => {
-          const tag = document.createElement('div');
-          tag.className = 'tag';
-          tag.innerHTML = `${sana} <span class="close" onclick="poistaTagi(${idx}, '${containerId}', '${inputId}')">&times;</span>`;
-          container.appendChild(tag);
-        });
-
-        container.appendChild(inputElem);
-      }
-
-      function tarkennaInput(inputId) {
+      function focusInput(inputId) {
         document.getElementById(inputId).focus();
       }
 
-      function tallennaJaAja() {
+      function tallennaAsetukset() {
+        document.getElementById("ilmoitusTeksti").innerText = "Haetaan hakemuksia...";
+
         const asetukset = {
-          tila: document.getElementById('tilaKytkin').checked,
-          hakusanat: hakusanat,
-          poissuljetut: poissuljetut,
-          spostit: document.getElementById('spostiInput').value.split(',').map(s => s.trim()).filter(Boolean),
-          hakutyyppi: {
-            rahoitushaku: document.getElementById('htRahoitushaku').checked,
-            avustukset: document.getElementById('htAvustukset').checked
-          },
-          rahoittajat: {
-            eu: document.getElementById('rahEU').checked,
-            oph: document.getElementById('rahOPH').checked,
-            ely: document.getElementById('rahELY').checked,
-            muut: document.getElementById('rahMUUT').checked
-          },
-          sivustot: {
-            haeavustuksia: document.getElementById('sivHaeavustuksia').checked,
-            rakennerahastot: document.getElementById('sivRakennerahastot').checked
-          }
+          tila: document.getElementById("tilaKytkin").checked,
+          hakusanat: dataStore.hakusanat,
+          poissulkevat: dataStore.poissulkevat,
+          spostit: dataStore.spostit
         };
 
-        document.getElementById('edellinenTilaTeksti').innerText = "Suoritetaan hakua...";
         google.script.run
-          .withSuccessHandler(function(vastaus) {
-            document.getElementById('edellinenTilaTeksti').innerText = vastaus.viesti;
-            document.getElementById('edellinenAikaTeksti').innerText = vastaus.aika;
+          .withSuccessHandler(function(res) {
+            document.getElementById("ilmoitusTeksti").innerText = res.viesti;
+            if (res.aika) document.getElementById("aikaTeksti").innerText = res.aika;
           })
           .tallennaAsetuksetJaAjaHaku(asetukset);
       }

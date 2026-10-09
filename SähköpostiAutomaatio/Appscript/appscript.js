@@ -39,6 +39,7 @@ function haeKaikkiAsetuksetUI() {
     tila: sheet.getRange("B1").getValue() !== "POIS",
     hakusanat: luePuhdasLista(sheet, "A", 2),
     spostit: luePuhdasLista(sheet, "C", 2),
+    poissulkevat: luePuhdasLista(sheet, "E", 2),
     hakutyyppi: { rahoitushaku: true, avustukset: true },
     rahoittajat: { eu: true, oph: true, ely: true, muut: true },
     sivustot: { haeavustuksia: true, rakennerahastot: true },
@@ -53,13 +54,16 @@ function tallennaAsetuksetJaAjaHaku(a) {
     sheet = ss.insertSheet("Asetukset");
   }
 
+  // Tyhjennetään sarakkeet A, C ja E vanhoista arvoista
   sheet.getRange("A2:A100").clearContent();
   sheet.getRange("C2:C100").clearContent();
+  sheet.getRange("E2:E100").clearContent();
 
   sheet.getRange("B1").setValue(a.tila ? "PÄÄLLÄ" : "POIS");
 
   kirjoitaLista(sheet, "A", 2, a.hakusanat);
   kirjoitaLista(sheet, "C", 2, a.spostit);
+  kirjoitaLista(sheet, "E", 2, a.poissulkevat);
 
   const nyt = new Date();
   const aikaStr = nyt.toLocaleDateString("fi-FI") + " / klo " + nyt.toLocaleTimeString("fi-FI", {hour: '2-digit', minute:'2-digit'});
@@ -79,34 +83,30 @@ function tallennaAsetuksetJaAjaHaku(a) {
 
 function ajaRahoitushakuKayttoliittymalla() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-
   const asetuksetUI = haeKaikkiAsetuksetUI();
-
-  Logger.log("Ajettaessa UI-hakua, luetut hakusanat: " + JSON.stringify(asetuksetUI.hakusanat));
 
   if (!asetuksetUI.tila) return "Haku kytketty POIS päältä.";
   if (!asetuksetUI.hakusanat || asetuksetUI.hakusanat.length === 0) return "⚠️ Ei hakusanoja valittuna.";
 
-  let uudetHautYhteensa = [];
+  let uudetIlmoitettavat = [];
 
   // 1. Haeavustuksia.fi
-  let rawHaeavustuksia = haeHaeavustuksiaData(asetuksetUI.hakusanat);
-  Logger.log("Haeavustuksia raaka-osumat yhteensä: " + rawHaeavustuksia.length);
-  let uudetHaeavustuksia = kasitteleUudetHaut(ss, "Haeavustuksia.fi", rawHaeavustuksia);
-  uudetHautYhteensa = uudetHautYhteensa.concat(uudetHaeavustuksia);
+  let rawHaeavustuksia = haeHaeavustuksiaData(asetuksetUI.hakusanat, asetuksetUI.poissulkevat);
+  let uudetHaeavustuksia = kasitteleUudetHautOptionA(ss, "Haeavustuksia.fi", rawHaeavustuksia);
+  uudetIlmoitettavat = uudetIlmoitettavat.concat(uudetHaeavustuksia);
 
   // 2. Rakennerahastot.fi
-  let rawRakennerahastot = haeRakennerahastotData(asetuksetUI.hakusanat);
-  let uudetRakennerahastot = kasitteleUudetHaut(ss, "Rakennerahastot", rawRakennerahastot);
-  uudetHautYhteensa = uudetHautYhteensa.concat(uudetRakennerahastot);
+  let rawRakennerahastot = haeRakennerahastotData(asetuksetUI.hakusanat, asetuksetUI.poissulkevat);
+  let uudetRakennerahastot = kasitteleUudetHautOptionA(ss, "Rakennerahastot", rawRakennerahastot);
+  uudetIlmoitettavat = uudetIlmoitettavat.concat(uudetRakennerahastot);
 
   // 3. SÄHKÖPOSTI-ILMOITUS
   if (asetuksetUI.spostit.length > 0) {
-    if (uudetHautYhteensa.length > 0) {
-      lahetaIlmoitus(asetuksetUI.spostit.join(","), uudetHautYhteensa);
-      return `✅ Löytyi ${uudetHautYhteensa.length} uutta hakua! Sähköposti lähetetty.`;
+    if (uudetIlmoitettavat.length > 0) {
+      lahetaIlmoitus(asetuksetUI.spostit.join(","), uudetIlmoitettavat);
+      return `✅ Taulukko päivitetty! Löytyi ${uudetIlmoitettavat.length} aivan uutta hakua. Sähköposti lähetetty.`;
     } else {
-      return "Haku suoritettu: Ei uusia hakuja.";
+      return "✅ Taulukko päivitetty (suodatukset ajantasalla). Ei uusia ilmoitettavia hakuja.";
     }
   } else {
     return "⚠️ Haku tehty, mutta sähköpostiosoitetta ei ole asetettu!";
@@ -114,36 +114,74 @@ function ajaRahoitushakuKayttoliittymalla() {
 }
 
 // =================================================================
-// 3. HAKULOGIIKKA JA DUPLIKAATTIKÄSITTELY
+// 3. HAKULOGIIKKA JA SYNKRONOINTI (OPTION A)
 // =================================================================
 
-function onkoKiinnostava(teksti, hakusanat) {
+function onkoKiinnostava(teksti, hakusanat, poissulkevatSanat) {
   if (!teksti) return null;
   
   const rawTeksti = String(teksti).toLowerCase();
   const siivottuTeksti = " " + rawTeksti.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, " ") + " ";
 
+  // 1. POISSULKEVAT SANAT: Jos löytyy, hylätään heti
+  if (poissulkevatSanat && poissulkevatSanat.length > 0) {
+    for (let i = 0; i < poissulkevatSanat.length; i++) {
+      let eiSana = String(poissulkevatSanat[i]).toLowerCase().trim();
+      if (!eiSana) continue;
+
+      if (eiSana.length <= 3) {
+        if (siivottuTeksti.includes(" " + eiSana + " ")) return null;
+      } else {
+        if (rawTeksti.includes(eiSana)) return null;
+      }
+    }
+  }
+
+  // 2. HYVÄKSYTTÄVÄT HAKUSANAT
   for (let i = 0; i < hakusanat.length; i++) {
     let sana = String(hakusanat[i]).toLowerCase().trim();
     if (!sana) continue;
 
     if (sana.length <= 3) {
-      if (siivottuTeksti.includes(" " + sana + " ")) {
-        return sana;
-      }
+      if (siivottuTeksti.includes(" " + sana + " ")) return sana;
     } else {
-      if (rawTeksti.includes(sana)) {
-        return sana;
-      }
+      if (rawTeksti.includes(sana)) return sana;
     }
   }
 
   return null;
 }
 
-function kasitteleUudetHaut(ss, sheetNimi, haetutHaut) {
+/**
+ * OPTIO A: TYHJENTÄÄ JA PÄIVITTÄÄ TAULUKON TÄYSIN AJAN TASALLE.
+ * Käyttää 'Muisti'-välilehteä varmistamaan, ettei samaa hakua lähetetä sähköpostiin kahdesti.
+ */
+/**
+ * OPTIO A: SYNKRONOI TAULUKON EIKÄ LÄHETÄ SÄHKÖPOSTIA SAMOISTA HAEISTA
+ */
+function kasitteleUudetHautOptionA(ss, sheetNimi, haetutHaut) {
   if (!ss) ss = SpreadsheetApp.getActiveSpreadsheet();
   
+  // 1. Varmistetaan 'Muisti'-välilehti
+  let muistiSheet = ss.getSheetByName("Muisti");
+  if (!muistiSheet) {
+    muistiSheet = ss.insertSheet("Muisti");
+    muistiSheet.appendRow(["Tunniste", "Nimi", "LähetettyPvm"]);
+    try { muistiSheet.hideSheet(); } catch(e) {}
+  }
+
+  // Luetaan kaikki aiemmin sähköpostilla lähetetyt tunnisteet
+  const vanhatMuistiRivit = muistiSheet.getDataRange().getValues();
+  let lahetetytSet = new Set();
+  
+  for (let m = 1; m < vanhatMuistiRivit.length; m++) {
+    const avain = String(vanhatMuistiRivit[m][0] || "").trim();
+    if (avain) {
+      lahetetytSet.add(avain);
+    }
+  }
+
+  // 2. Valmistellaan kohdevälilehti (esim. Haeavustuksia.fi)
   let sheet = ss.getSheetByName(sheetNimi);
   if (!sheet) {
     sheet = ss.insertSheet(sheetNimi);
@@ -154,14 +192,18 @@ function kasitteleUudetHaut(ss, sheetNimi, haetutHaut) {
 
   const otsikot = ["Koodi / ID", "Hakuilmoituksen Nimi", "Rahoittaja", "Hakuaika Päättyy", "Löytynyt Avainsana", "Suora Linkki", "Lisätty Taulukkoon"];
   let kaikkiRivit = [otsikot];
-  let aiemmatTunnisteet = new Set();
+  let nähdytTunnisteet = new Set();
   const lisattyPvm = new Date().toLocaleDateString("fi-FI");
+
+  let uudetSähköpostiin = [];
+  let uudetMuistiRivit = [];
 
   if (haetutHaut && haetutHaut.length > 0) {
     haetutHaut.forEach(hanke => {
-      const tunniste = (String(hanke.nimi) + "_" + String(hanke.linkki)).toLowerCase().trim();
+      // LUODAAN täysin puhdistettu uniikki tunniste (ilman erikoismerkkejä)
+      const tunniste = luoUniikkiTunniste(hanke);
       
-      if (!aiemmatTunnisteet.has(tunniste)) {
+      if (!nähdytTunnisteet.has(tunniste)) {
         kaikkiRivit.push([
           hanke.id || "VALTIO/EU",
           hanke.nimi,
@@ -171,30 +213,69 @@ function kasitteleUudetHaut(ss, sheetNimi, haetutHaut) {
           hanke.linkki,
           lisattyPvm
         ]);
-        aiemmatTunnisteet.add(tunniste);
+        nähdytTunnisteet.add(tunniste);
+
+        // Jos TÄTÄ TUNNISTETTA ei ole vielä koskaan lähetetty sähköpostitse:
+        if (!lahetetytSet.has(tunniste)) {
+          uudetSähköpostiin.push(hanke);
+          lahetetytSet.add(tunniste);
+          uudetMuistiRivit.push([tunniste, hanke.nimi, lisattyPvm]);
+        }
       }
     });
   }
 
+  // 3. Kirjoitetaan tuoreet tiedot taulukkoon
   if (kaikkiRivit.length > 0) {
     sheet.getRange(1, 1, kaikkiRivit.length, 7).setValues(kaikkiRivit);
     sheet.getRange(1, 1, 1, 7).setFontWeight("bold").setBackground("#c9daf8");
-    
-    try {
-      sheet.autoResizeColumns(1, 7);
-    } catch(e) {}
+    try { sheet.autoResizeColumns(1, 7); } catch(e) {}
+  }
+
+  // 4. Tallennetaan uudet tunnisteet Muisti-välilehdelle
+  if (uudetMuistiRivit.length > 0) {
+    muistiSheet.getRange(muistiSheet.getLastRow() + 1, 1, uudetMuistiRivit.length, 3).setValues(uudetMuistiRivit);
   }
 
   SpreadsheetApp.flush();
 
-  return haetutHaut;
+  return uudetSähköpostiin;
+}
+
+/**
+ * APUFUNKTIO: Puhdistaa ja luo täysin varman tunnisteen hankkeelle.
+ */
+function luoUniikkiTunniste(hanke) {
+  let L = String(hanke.linkki || "").toLowerCase().trim();
+  let N = String(hanke.nimi || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  
+  // Jos linkki sisältää suoran ID-polun /haku/va-..., käytetään sitä primary-tunnisteena
+  if (L.includes("/haku/") && !L.endsWith("/haku/")) {
+    return L.split("/haku/")[1].replace(/[^a-z0-9]/g, "");
+  }
+  
+  // Muussa tapauksessa käytetään nimen puhdistettua versiota
+  return N;
+}
+
+/**
+ * APUFUNKTIO: Tyhjentää vanhan muistin, jos haluat aloittaa alusta
+ */
+function tyhjennaHakuMuisti() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const m = ss.getSheetByName("Muisti");
+  if (m) {
+    m.clearContents();
+    m.appendRow(["Tunniste", "Nimi", "LähetettyPvm"]);
+    Logger.log("Muisti tyhjennetty!");
+  }
 }
 
 // =================================================================
 // 4. API- JA RAAPUTUSFUNKTIOT
 // =================================================================
 
-function haeHaeavustuksiaData(hakusanat) {
+function haeHaeavustuksiaData(hakusanat, poissulkevat) {
   let tulokset = [];
   let sivu = 1;
   let sivuKoko = 100;
@@ -219,7 +300,6 @@ function haeHaeavustuksiaData(hakusanat) {
 
         ilmoitukset.forEach(item => {
           let nimiTeksti = "";
-          
           if (item.nimi) {
             if (typeof item.nimi === "object") {
               nimiTeksti = item.nimi.fi || item.nimi.sv || item.nimi.en || "";
@@ -228,17 +308,11 @@ function haeHaeavustuksiaData(hakusanat) {
             }
           }
 
-          let osuma = onkoKiinnostava(nimiTeksti, hakusanat);
+          let osuma = onkoKiinnostava(nimiTeksti, hakusanat, poissulkevat);
           if (osuma) {
-            // Haeavustuksia.fi käyttää tunnistimena kenttää hakuasianAsianumero
             const asianumero = item.hakuasianAsianumero || item.koodi || item.tunniste || item.id;
-            
-            let suoraLinkki = "https://www.haeavustuksia.fi";
-            if (asianumero) {
-              suoraLinkki = `https://www.haeavustuksia.fi/fi/haku/${asianumero}`;
-            }
+            let suoraLinkki = asianumero ? `https://www.haeavustuksia.fi/fi/haku/${asianumero}` : "https://www.haeavustuksia.fi";
 
-            // Rahoittajan nimi
             let jarjestaja = "Valtio";
             if (item.vastuullinenJarjestajaOrganisaatio) {
               if (typeof item.vastuullinenJarjestajaOrganisaatio === "object") {
@@ -277,7 +351,7 @@ function haeHaeavustuksiaData(hakusanat) {
   return tulokset;
 }
 
-function haeRakennerahastotData(hakusanat) {
+function haeRakennerahastotData(hakusanat, poissulkevat) {
   const url = "https://rakennerahastot.fi/hakuajat";
   let tulokset = [];
   try {
@@ -290,7 +364,7 @@ function haeRakennerahastotData(hakusanat) {
         const href = match[1];
         const teksti = match[2].replace(/<[^>]+>/g, '').trim();
         if (teksti.length > 10 && (href.includes("/haku") || href.includes("eura2021") || href.includes("rakennerahastot"))) {
-          let osuma = onkoKiinnostava(teksti, hakusanat);
+          let osuma = onkoKiinnostava(teksti, hakusanat, poissulkevat);
           if (osuma) {
             tulokset.push({
               id: "EU-HAKU",
@@ -332,6 +406,7 @@ function alustaAsetusTaulukko(sheet) {
   sheet.getRange("A1").setValue("Hakusanat").setFontWeight("bold");
   sheet.getRange("B1").setValue("PÄÄLLÄ");
   sheet.getRange("C1").setValue("Sähköpostit").setFontWeight("bold");
+  sheet.getRange("E1").setValue("Poissulkevat sanat").setFontWeight("bold");
   
   kirjoitaLista(sheet, "A", 2, ["koulutus", "valmennus", "innovaatio"]);
   
