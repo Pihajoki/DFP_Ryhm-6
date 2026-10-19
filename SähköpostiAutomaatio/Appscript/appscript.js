@@ -385,34 +385,96 @@ function haeRakennerahastotData(hakusanat, poissulkevat) {
 }
 
 function lahetaIlmoitus(vastaanottajat, uudetHaut) {
-  const aihe = `🚨 Uusia rahoitushakuja löytynyt (${uudetHaut.length} kpl)`;
-  let viesti = `Moi!\n\nAutomaattinen Hakemusvahti löysi ${uudetHaut.length} uutta hakua:\n\n`;
-  uudetHaut.forEach((h, i) => {
-    viesti += `${i + 1}. ${h.nimi}\n   - Avainsana: ${h.osumaSyy.toUpperCase()}\n   - Linkki: ${h.linkki}\n\n`;
+  var deadlines = haeDeadlineit();
+
+  var aihe = "🚨 Uusia rahoitushakuja löytynyt (" + uudetHaut.length + " kpl)";
+  var viesti = "Hei!\n\nAutomaattinen Hakemusvahti löysi " + uudetHaut.length + " uutta hakua:\n\n";
+
+  uudetHaut.forEach(function(h, i) {
+    viesti += (i + 1) + ". " + h.nimi + "\n";
+    viesti += "   - Avainsana: " + h.osumaSyy.toUpperCase() + "\n";
+    viesti += "   - Linkki: " + h.linkki + "\n";
+    if (deadlines[i]) {
+      viesti += "   - Hakuaika loppuu: " + muotoaDeadline(deadlines[i]) + "\n";
+    }
+    viesti += "\n";
   });
-  
+
   try {
     MailApp.sendEmail(vastaanottajat, aihe, viesti);
-  } catch(e) {
+  } catch (e) {
     Logger.log("Virhe sähköpostin lähetyksessä: " + e.toString());
   }
 }
+// Lue D2:D999 sivulta "Haeavustuksia.fi", palauta vain tyhjät poissulevut
+function haeDeadlineit() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Haeavustuksia.fi");
+  if (!sheet) {
+    Logger.log("Sivua 'Haeavustuksia.fi' ei löydy.");
+    return [];
+  }
 
+  var arvo = sheet.getRange("D2:D999").getValues();
+  var deadlineit = [];
+
+  arvo.forEach(function(row) {
+    var cell = row[0];
+    if (cell !== "" && cell !== null && cell !== undefined) {
+      deadlineit.push(cell);
+    }
+  });
+
+  return deadlineit;
+}
+
+// Muotoaa arvon (Date-objekti tai merkkijono) ihmisluettavaksi
+function muotoaDeadline(arvo) {
+  var d;
+
+  // Jos jo Date-objekti
+  if (arvo instanceof Date) {
+    d = arvo;
+  } else {
+    // Jos merkkijono (ISO muoto, "2027-12-31T21:59:00.000Z" tms.)
+    d = new Date(String(arvo));
+  }
+
+  // Jos new Date() ei saanut kelvollista päivämäärää
+  if (isNaN(d.getTime())) {
+    return String(arvo);
+  }
+
+  // Muoto: PP/KK/VVVV HH:00 (24-h kloki, paikallinen aikavyöhyke)
+  var pp   = ("0" + d.getDate()).slice(-2);
+  var kk   = ("0" + (d.getMonth() + 1)).slice(-2);
+  var vvvv = d.getFullYear();
+  var hh   = ("0" + d.getHours()).slice(-2);
+  var mm   = ("0" + d.getMinutes()).slice(-2);
+
+  return pp + "/" + kk + "/" + vvvv + " " + hh + ":" + mm;
+}
 // =================================================================
 // 5. APUFUNKTIOT
 // =================================================================
 
 function alustaAsetusTaulukko(sheet) {
+  sheet.clearContents();
   sheet.getRange("A1").setValue("Hakusanat").setFontWeight("bold");
   sheet.getRange("B1").setValue("PÄÄLLÄ");
   sheet.getRange("C1").setValue("Sähköpostit").setFontWeight("bold");
   sheet.getRange("E1").setValue("Poissulkevat sanat").setFontWeight("bold");
-  
-  kirjoitaLista(sheet, "A", 2, ["koulutus", "valmennus", "innovaatio"]);
+
+  // Oletushakusanat, jotka näkyvät heti kaikille uusiille käyttäjille
+  kirjoitaLista(sheet, "A", 2, ["koulutus", "valmennus", "hanke", "kehittäminen"]);
   
   let sposti = "";
-  try { sposti = Session.getActiveUser().getEmail(); } catch(e) {}
-  if (sposti) kirjoitaLista(sheet, "C", 2, [sposti]);
+  try { 
+    sposti = Session.getActiveUser().getEmail(); 
+  } catch(e) {}
+  
+  if (sposti) {
+    kirjoitaLista(sheet, "C", 2, [sposti]);
+  }
 }
 
 function luePuhdasLista(sheet, sarakeKirjain, aloitusRivi) {

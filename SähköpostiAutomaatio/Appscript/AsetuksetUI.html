@@ -200,7 +200,7 @@
   <body>
 
     <div class="container">
-      <!-- LOGO OSIIO -->
+      <!-- LOGO OSIO -->
       <div class="header-logo">
         <div class="logo-icon">e</div>
         <div class="logo-text">SUOMEN<br>eOPPIMISKESKUS RY</div>
@@ -255,7 +255,7 @@
         <!-- HAKU SIVUSTOT -->
         <div class="section-label">Haku sivustot</div>
         <div class="checkbox-group">
-          <label class="checkbox-label"><input type="checkbox" id="sEura" checked> Eura2021</label>
+          <label class="checkbox-label"><input type="checkbox" id="sHaeavustuksia" checked> Haeavustuksia.fi</label>
           <label class="checkbox-label"><input type="checkbox" id="sRakenne" checked> Rakennerahastot</label>
         </div>
 
@@ -263,7 +263,7 @@
         <div class="section-label">Ilmoitukset</div>
         <div class="info-box">
           <div class="info-title">★ <span id="ilmoitusTeksti">Edellinen haku tehty onnistuneesti!</span></div>
-          <div style="padding-left: 15px;" id="aikaTeksti">1.1.2026 / klo 16:00</div>
+          <div style="padding-left: 15px;" id="aikaTeksti">-</div>
         </div>
 
         <button class="main-btn" onclick="tallennaAsetukset()">Hae uusia hakemuksia nyt</button>
@@ -305,7 +305,6 @@
         const container = document.getElementById(containerId);
         const input = document.getElementById(inputId);
         
-        // Poistetaan vanhat tagit (säilytetään input)
         const oldTags = container.querySelectorAll('.tag');
         oldTags.forEach(t => t.remove());
 
@@ -351,7 +350,11 @@
           tila: document.getElementById("tilaKytkin").checked,
           hakusanat: dataStore.hakusanat,
           poissulkevat: dataStore.poissulkevat,
-          spostit: dataStore.spostit
+          spostit: dataStore.spostit,
+          sivustot: {
+            haeavustuksia: document.getElementById("sHaeavustuksia").checked,
+            rakennerahastot: document.getElementById("sRakenne").checked
+          }
         };
 
         google.script.run
