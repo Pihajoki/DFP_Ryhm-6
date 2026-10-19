@@ -346,7 +346,6 @@ function haeHaeavustuksiaData(hakusanat, poissulkevat) {
   return tulokset;
 }
 
-
 function lahetaIlmoitus(vastaanottajat, uudetHaut) {
   var deadlines = haeDeadlineit();
 
