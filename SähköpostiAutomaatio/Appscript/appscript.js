@@ -95,11 +95,6 @@ function ajaRahoitushakuKayttoliittymalla() {
   let uudetHaeavustuksia = kasitteleUudetHautOptionA(ss, "Haeavustuksia.fi", rawHaeavustuksia);
   uudetIlmoitettavat = uudetIlmoitettavat.concat(uudetHaeavustuksia);
 
-  // 2. Rakennerahastot.fi
-  let rawRakennerahastot = haeRakennerahastotData(asetuksetUI.hakusanat, asetuksetUI.poissulkevat);
-  let uudetRakennerahastot = kasitteleUudetHautOptionA(ss, "Rakennerahastot", rawRakennerahastot);
-  uudetIlmoitettavat = uudetIlmoitettavat.concat(uudetRakennerahastot);
-
   // 3. SÄHKÖPOSTI-ILMOITUS
   if (asetuksetUI.spostit.length > 0) {
     if (uudetIlmoitettavat.length > 0) {
@@ -351,38 +346,6 @@ function haeHaeavustuksiaData(hakusanat, poissulkevat) {
   return tulokset;
 }
 
-function haeRakennerahastotData(hakusanat, poissulkevat) {
-  const url = "https://rakennerahastot.fi/hakuajat";
-  let tulokset = [];
-  try {
-    const res = UrlFetchApp.fetch(url, { muteHttpExceptions: true, headers: { "User-Agent": "Mozilla/5.0" } });
-    if (res.getResponseCode() === 200) {
-      const html = res.getContentText();
-      const regex = /<a[^>]+href=["']([^"']+)["'][^>]*>(.*?)<\/a>/gi;
-      let match;
-      while ((match = regex.exec(html)) !== null) {
-        const href = match[1];
-        const teksti = match[2].replace(/<[^>]+>/g, '').trim();
-        if (teksti.length > 10 && (href.includes("/haku") || href.includes("eura2021") || href.includes("rakennerahastot"))) {
-          let osuma = onkoKiinnostava(teksti, hakusanat, poissulkevat);
-          if (osuma) {
-            tulokset.push({
-              id: "EU-HAKU",
-              nimi: teksti,
-              rahoittaja: "EAKR / ESR+ / JTF",
-              loppupvm: "-",
-              linkki: href.startsWith("http") ? href : "https://rakennerahastot.fi" + href,
-              osumaSyy: osuma
-            });
-          }
-        }
-      }
-    }
-  } catch (e) {
-    Logger.log("Virhe Rakennerahastot.fi haussa: " + e.toString());
-  }
-  return tulokset;
-}
 
 function lahetaIlmoitus(vastaanottajat, uudetHaut) {
   var deadlines = haeDeadlineit();
