@@ -1,0 +1,301 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="34X1Bqe46x3X2vu4dEu3">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <UserObject label="" mermaidData="{&#xa;  &quot;data&quot;: &quot;flowchart TD\n    A[\&quot;Työntekijä valitsee kiinnostavan hankkeen\&quot;] --&gt; B[\&quot;Käynnistä hakemusluonnoksen muodostaminen\&quot;]\n \n    B --&gt; C[\&quot;Hae hankkeen tiedot&lt;br/&gt;kiinnostavien hankkeiden listalta\&quot;]\n    B --&gt; D[\&quot;Hae taustamateriaalit&lt;br/&gt;Google Drive -kansiosta\&quot;]\n \n    D --&gt; D1[\&quot;Aiemmat hakemukset\&quot;]\n    D --&gt; D2[\&quot;Organisaation perustiedot\&quot;]\n    D --&gt; D3[\&quot;Palvelu- ja osaamiskuvaukset\&quot;]\n    D --&gt; D4[\&quot;Referenssit ja aiemmat hankkeet\&quot;]\n \n    C --&gt; E[\&quot;Koosta Geminille&lt;br/&gt;hankekohtainen aineisto\&quot;]\n    D1 --&gt; E\n    D2 --&gt; E\n    D3 --&gt; E\n    D4 --&gt; E\n \n    E --&gt; F[\&quot;Gemini analysoi&lt;br/&gt;hankkeen vaatimukset\&quot;]\n    F --&gt; G[\&quot;Gemini muodostaa personoidun&lt;br/&gt;hakemusluonnoksen\&quot;]\n \n    G --&gt; H[\&quot;Luo Google Docs -asiakirja\&quot;]\n    H --&gt; I[\&quot;Tallenna luonnos&lt;br/&gt;Google Driveen\&quot;]\n    I --&gt; J[\&quot;Ilmoita vastuuhenkilölle&lt;br/&gt;sähköpostilla\&quot;]\n \n    J --&gt; K[\&quot;Työntekijä tarkistaa luonnoksen\&quot;]\n    K --&gt; L{\&quot;Tarvitaanko muutoksia?\&quot;}\n \n    L --&gt;|Kyllä| M[\&quot;Anna kommentit tai&lt;br/&gt;täydennä lähtötietoja\&quot;]\n    M --&gt; G\n \n    L --&gt;|Ei| N[\&quot;Hyväksy hakemusluonnos\&quot;]\n    N --&gt; O[\&quot;Manuaalinen viimeistely ja&lt;br/&gt;lähetys rahoittajan palvelussa\&quot;]\n \n    style B fill:#dae8fc,stroke:#6c8ebf\n    style F fill:#e1d5e7,stroke:#9673a6\n    style G fill:#e1d5e7,stroke:#9673a6\n    style K fill:#fff2cc,stroke:#d6b656\n    style O fill:#d5e8d4,stroke:#82b366&quot;,&#xa;  &quot;config&quot;: null&#xa;}" id="1tdzCotbLcXuoeyTedrt-1">
+          <mxCell connectable="0" parent="1" style="group;transparentBounds=1;editIcon=1;lockedGroup=0;groupPadding=10;" vertex="1">
+            <mxGeometry as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Työntekijä valitsee kiinnostavan hankkeen" mermaidId="n:A" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Työntekijä valitsee kiinnostavan hankkeen" id="1tdzCotbLcXuoeyTedrt-2">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="54" width="363" x="637.5" y="40" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-5" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;curved=1;" target="1tdzCotbLcXuoeyTedrt-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-13" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="Ql8k-Qt-ZBmCicDk43v6-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-24" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0;exitDx=0;exitDy=0;curved=1;" target="Ql8k-Qt-ZBmCicDk43v6-22">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1016.52" y="230" />
+              <mxPoint x="1440" y="230" />
+              <mxPoint x="1440" y="680" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-25" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;curved=1;" target="Ql8k-Qt-ZBmCicDk43v6-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-52" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;curved=1;" target="Ql8k-Qt-ZBmCicDk43v6-27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Käynnistä hakemusluonnoksen muodostaminen" mermaidId="n:B" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Käynnistä hakemusluonnoksen muodostaminen" id="1tdzCotbLcXuoeyTedrt-3">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="54" width="394" x="622.5" y="280" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-6" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="1tdzCotbLcXuoeyTedrt-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Scripti Hakee taustamateriaalit&lt;br&gt;Google Drive -kansiosta" mermaidId="n:D" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Hae taustamateriaalit&#xa;Google Drive -kansiosta" id="1tdzCotbLcXuoeyTedrt-5">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="258" x="290" y="350" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-50" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Ql8k-Qt-ZBmCicDk43v6-49">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Referenssit ja aiemmat hankkeet&lt;div&gt;Palvelu- ja osaamiskuvaukset&lt;/div&gt;&lt;div&gt;Organisaation perustiedot&lt;/div&gt;" mermaidId="n:D4" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Referenssit ja aiemmat hankkeet" id="1tdzCotbLcXuoeyTedrt-9">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="297" x="251" y="453" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-18" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="Ql8k-Qt-ZBmCicDk43v6-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Geminin prompti muodostuu kovakoodatuista ohjeista ja eri muuttujista." mermaidId="n:E" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Koosta Geminille&#xa;hankekohtainen aineisto" id="1tdzCotbLcXuoeyTedrt-10">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="235" x="701.5" y="690" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Gemini analysoi&#xa;hankkeen vaatimukset" mermaidId="n:F" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Gemini analysoi&#xa;hankkeen vaatimukset" id="1tdzCotbLcXuoeyTedrt-11">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="220" x="709" y="970" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-20" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="1tdzCotbLcXuoeyTedrt-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Gemini muodostaa personoidun&#xa;hakemusluonnoksen" mermaidId="n:G" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Gemini muodostaa personoidun&#xa;hakemusluonnoksen" id="1tdzCotbLcXuoeyTedrt-12">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="285" x="677" y="1093" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Luo Google Docs -asiakirja" mermaidId="n:H" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Luo Google Docs -asiakirja" id="1tdzCotbLcXuoeyTedrt-13">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="54" width="249" x="702" y="1216" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Tallenna luonnos&#xa;Google Driveen" mermaidId="n:I" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Tallenna luonnos&#xa;Google Driveen" id="1tdzCotbLcXuoeyTedrt-14">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="179" x="737" y="1350" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Työntekijä tarkistaa luonnoksen" mermaidId="n:K" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Työntekijä tarkistaa luonnoksen" id="1tdzCotbLcXuoeyTedrt-16">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="54" width="288" x="679" y="1510" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Tarvitaanko muutoksia?" mermaidId="n:L" mermaidBaseStyle="rhombus;html=1;strokeWidth=1;whiteSpace=wrap;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Tarvitaanko muutoksia?" id="1tdzCotbLcXuoeyTedrt-17">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="rhombus;html=1;strokeWidth=1;whiteSpace=wrap;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="283" width="283" x="684" y="1670" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Hyväksy hakemusluonnos" mermaidId="n:N" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Hyväksy hakemusluonnos" id="1tdzCotbLcXuoeyTedrt-19">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="54" width="239" x="729" y="2032" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Manuaalinen viimeistely ja&#xa;lähetys rahoittajan palvelussa" mermaidId="n:O" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Manuaalinen viimeistely ja&#xa;lähetys rahoittajan palvelussa" id="1tdzCotbLcXuoeyTedrt-20">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="275" x="711" y="2145" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" mermaidId="e:A-&gt;B#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;" mermaidBaseValue="" id="1tdzCotbLcXuoeyTedrt-21">
+          <mxCell edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-2" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;entryDx=0;entryDy=0;" target="1tdzCotbLcXuoeyTedrt-3">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="" mermaidId="e:F-&gt;G#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;" mermaidBaseValue="" id="1tdzCotbLcXuoeyTedrt-34">
+          <mxCell edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-11" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="1tdzCotbLcXuoeyTedrt-12">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="" mermaidId="e:H-&gt;I#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;" mermaidBaseValue="" id="1tdzCotbLcXuoeyTedrt-36">
+          <mxCell edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-13" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="1tdzCotbLcXuoeyTedrt-14">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="" mermaidId="e:I-&gt;J#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;" mermaidBaseValue="" id="1tdzCotbLcXuoeyTedrt-37">
+          <mxCell edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-14" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="1tdzCotbLcXuoeyTedrt-16">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points" />
+              <mxPoint x="826" y="1450" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="" mermaidId="e:K-&gt;L#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;" mermaidBaseValue="" id="1tdzCotbLcXuoeyTedrt-39">
+          <mxCell edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-16" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="1tdzCotbLcXuoeyTedrt-17">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Kyllä" mermaidId="e:L-&gt;M#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.11;exitY=1;entryX=0.77;entryY=0;" mermaidBaseValue="Kyllä" id="1tdzCotbLcXuoeyTedrt-40">
+          <mxCell edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-17" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.11;exitY=1;entryX=0.75;entryY=0;rounded=0;entryDx=0;entryDy=0;" target="Ql8k-Qt-ZBmCicDk43v6-16">
+            <mxGeometry relative="1" x="-0.0427" y="22" as="geometry">
+              <mxPoint as="offset" />
+              <Array as="points">
+                <mxPoint x="610" y="1940" />
+              </Array>
+              <mxPoint x="629.0899999999997" y="2022" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Ei" mermaidId="e:L-&gt;N#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.57;exitY=1;entryX=0.5;entryY=0;" mermaidBaseValue="Ei" id="1tdzCotbLcXuoeyTedrt-42">
+          <mxCell edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-17" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.57;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="1tdzCotbLcXuoeyTedrt-19">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="848" y="1988" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="" mermaidId="e:N-&gt;O#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;" mermaidBaseValue="" id="1tdzCotbLcXuoeyTedrt-43">
+          <mxCell edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="1tdzCotbLcXuoeyTedrt-19" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="1tdzCotbLcXuoeyTedrt-20">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-3" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="Ql8k-Qt-ZBmCicDk43v6-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="1tdzCotbLcXuoeyTedrt-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-36" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="Ql8k-Qt-ZBmCicDk43v6-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;curved=1;" target="Ql8k-Qt-ZBmCicDk43v6-32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Työntekijä syöttää käyttöliittymään seuraava tiedot:&lt;i&gt;Haettavan hankkeen URL, Drive työkansion osoite, Valittu AI-malli, Tyhjä/osittain täytetty hakemuspohja ja vapaaehtoinen tarkentava ohjeistus.&lt;/i&gt;" mermaidId="n:D" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Hae taustamateriaalit&#xa;Google Drive -kansiosta" id="Ql8k-Qt-ZBmCicDk43v6-2">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="160" width="228" x="330" y="40" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-8" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="Ql8k-Qt-ZBmCicDk43v6-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;curved=1;" target="1tdzCotbLcXuoeyTedrt-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="DRIVE API muuntaa tiedostot luettaviksi ja tallentaa ne muuttujaan." mermaidId="n:D4" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Referenssit ja aiemmat hankkeet" id="Ql8k-Qt-ZBmCicDk43v6-7">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="297" x="261" y="613" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-46" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="Ql8k-Qt-ZBmCicDk43v6-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Ql8k-Qt-ZBmCicDk43v6-45">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Scripti hakee hakemus URL perusteella tiedot sivustolta JINA API avulla." mermaidId="n:D" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Hae taustamateriaalit&#xa;Google Drive -kansiosta" id="Ql8k-Qt-ZBmCicDk43v6-10">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="258" x="589" y="380" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-12" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="Ql8k-Qt-ZBmCicDk43v6-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="1tdzCotbLcXuoeyTedrt-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Scripti tallentaa sivuston + alisivustojen tiedot muuttujaan." mermaidId="n:D" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Hae taustamateriaalit&#xa;Google Drive -kansiosta" id="Ql8k-Qt-ZBmCicDk43v6-11">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="258" x="610" y="540" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-19" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="Ql8k-Qt-ZBmCicDk43v6-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="1tdzCotbLcXuoeyTedrt-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Gemini API kutsutaan muodostetun promptin pohjalta.&amp;nbsp;" mermaidId="n:E" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Koosta Geminille&#xa;hankekohtainen aineisto" id="Ql8k-Qt-ZBmCicDk43v6-15">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="235" x="701.5" y="820" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Käyttäjä jatkaa hakemuksen kehittämistä Sparraus agentin kanssa." mermaidId="n:O" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Manuaalinen viimeistely ja&#xa;lähetys rahoittajan palvelussa" id="Ql8k-Qt-ZBmCicDk43v6-16">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="265" x="390" y="2040" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-26" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="Ql8k-Qt-ZBmCicDk43v6-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;curved=1;" target="1tdzCotbLcXuoeyTedrt-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Kättäjän antama syöte tallennetaan suoraan muuttujaan." mermaidId="n:D" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Hae taustamateriaalit&#xa;Google Drive -kansiosta" id="Ql8k-Qt-ZBmCicDk43v6-21">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="258" x="888" y="450" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-23" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="Ql8k-Qt-ZBmCicDk43v6-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;curved=1;" target="Ql8k-Qt-ZBmCicDk43v6-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Käytetään käyttäjän valitsemaa Gemini mallia." mermaidId="n:D" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Hae taustamateriaalit&#xa;Google Drive -kansiosta" id="Ql8k-Qt-ZBmCicDk43v6-22">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="258" x="1112" y="660" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-40" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="Ql8k-Qt-ZBmCicDk43v6-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1268.9411764705883" y="439.9999999999998" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <UserObject label="Scripti hakee hakemuspohjan ID perusteella." mermaidId="n:D" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Hae taustamateriaalit&#xa;Google Drive -kansiosta" id="Ql8k-Qt-ZBmCicDk43v6-27">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="258" x="1140" y="330" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-31" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="Ql8k-Qt-ZBmCicDk43v6-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;curved=1;" target="1tdzCotbLcXuoeyTedrt-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Scripti tallentaa hakemuksen tiedot muotoiluineen muuttujaan" mermaidId="n:D" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Hae taustamateriaalit&#xa;Google Drive -kansiosta" id="Ql8k-Qt-ZBmCicDk43v6-28">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="54" width="258" x="1140" y="540" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-37" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="Ql8k-Qt-ZBmCicDk43v6-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;curved=1;" target="1tdzCotbLcXuoeyTedrt-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-43" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="Ql8k-Qt-ZBmCicDk43v6-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;curved=1;" target="Ql8k-Qt-ZBmCicDk43v6-42">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="JS tallentaa hakemuksen pohjan driveen ja palauttaa tiedoston ID" mermaidId="n:D" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Hae taustamateriaalit&#xa;Google Drive -kansiosta" id="Ql8k-Qt-ZBmCicDk43v6-32">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="54" width="258" x="32" y="220" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-41" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="Ql8k-Qt-ZBmCicDk43v6-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Ql8k-Qt-ZBmCicDk43v6-28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="DRIVE" mermaidId="n:F" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Gemini analysoi&#xa;hankkeen vaatimukset" id="Ql8k-Qt-ZBmCicDk43v6-39">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="41" width="120" x="1210" y="439" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-44" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="Ql8k-Qt-ZBmCicDk43v6-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;curved=1;" target="Ql8k-Qt-ZBmCicDk43v6-32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="DRIVE" mermaidId="n:F" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Gemini analysoi&#xa;hankkeen vaatimukset" id="Ql8k-Qt-ZBmCicDk43v6-42">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="41" width="120" x="95" y="320" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-47" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="Ql8k-Qt-ZBmCicDk43v6-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="Ql8k-Qt-ZBmCicDk43v6-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="JINA" mermaidId="n:F" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Gemini analysoi&#xa;hankkeen vaatimukset" id="Ql8k-Qt-ZBmCicDk43v6-45">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="41" width="120" x="658" y="476" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Ql8k-Qt-ZBmCicDk43v6-51" edge="1" parent="1tdzCotbLcXuoeyTedrt-1" source="Ql8k-Qt-ZBmCicDk43v6-49" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="Ql8k-Qt-ZBmCicDk43v6-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="DRIVE" mermaidId="n:F" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="Gemini analysoi&#xa;hankkeen vaatimukset" id="Ql8k-Qt-ZBmCicDk43v6-49">
+          <mxCell parent="1tdzCotbLcXuoeyTedrt-1" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="41" width="120" x="349.5" y="546.5" as="geometry" />
+          </mxCell>
+        </UserObject>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
