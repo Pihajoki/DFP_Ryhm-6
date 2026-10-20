@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta charset="utf-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      html, body {
+        margin: 0;
+        padding: 10px 13px 13px 13px;
+        font-family: 'Open Sans', sans-serif;
+        background-color: #e6e6e6;
+        color: #000000;
+        box-sizing: border-box;
+      }
+      .container {
+        width: 100%;
+        max-width: 1050px;
+        max-height: 850px;
+        margin: 0 auto;
+        background-color: #55803299; color: #000000;
+        padding: 35px;
+        border-radius: 20px;
+      }
+
+      .vaihtoehdot-container {
+        display: flex;
+        align-items: center; /* Keskittää elementit pystysuunnassa */
+        justify-content: space-between;
+        gap: 15px; /* Väli laatikoiden ja TAI-tekstin väliin */
+        width: 100%;
+      }
+
+      /* Molemmat sarakkeet ottavat yhtä paljon tilaa */
+      .flex-item {
+        flex: 1;
+        margin-bottom: 0; /* Poistetaan aiempi alamarginaali Flexboxissa */
+      }
+
+      /* Väliteksti pystysuunnassa keskellä laatikoiden välissä */
+      .vaihto-teksti {
+        font-weight: bold;
+        color: #555555;
+        font-size: 14px;
+        padding: 0 5px;
+        white-space: nowrap;
+      }
+
+      h2 {
+        margin-top: 0;
+        color: #333333;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 15px;
+        line-height: 100%;
+        letter-spacing: 0;
+        color: #000000;
+        margin-bottom: 5px;
+      }
+      input[type="text"],
+      input[type="email"],
+      input[type="url"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      /* Alasvetovalikon muotoilu */
+      .kielimalli {
+        width: 220px;
+        padding: 8px 12px;
+        font-size: 14px;
+        background-color: #ffffff;
+        border: 1px solid #333333;
+        border-radius: 10px;
+        outline: none;
+        cursor: pointer;
+      }
+
+      .linkki {
+        border: 1px solid #333333 !important;
+        border-radius: 10px !important;
+      }
+
+      /* Painikkeet */
+      .btn-pieni {
+        padding: 10px 15px;
+        background-color: #6ba22d;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 13px;
+        white-space: nowrap;
+      }
+      .btn-pieni:hover {
+        background-color: #219150;
+      }
+      .btn-lisaa {
+        background-color: #2980b9;
+      }
+      .btn-lisaa:hover {
+        background-color: #1c5980;
+      }
+
+      
+
+      /* Yläosan kytkin ja otsikko */
+      .palkki-ryhma {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+
+      /* Drop Zone */
+      .drop-zone {
+        border: 1px dashed #333333;
+        border-radius: 10px;
+        padding: 10px;
+        text-align: center;
+        background-color: #ffffff;
+        color: #555;
+        cursor: pointer;
+        transition: background-color 0.2s, border-color 0.2s;
+        font-size: 13px;
+        min-height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .drop-zone:hover {
+        background-color: #ebf5fb;
+        border-color: #1b4f72;
+      }
+
+      /* Pääpainike */
+      .submit-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #d9d9d9;
+        color: #333333;
+        border: none;
+        border-radius: 10px;
+        font-size: 20px;
+        cursor: pointer;
+        margin-top: 10px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+      }
+      .submit-btn:disabled {
+        background-color: #bdc3c7;
+        cursor: not-allowed;
+      }
+
+      /* Asetetaan otsikko omalle rivilleen tyypilliseen tapaan */
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      /* Asetetaan teksti-input ja status-ruutu rinnakkain */
+      .input-wrapper {
+        display: flex;
+        align-items: center; /* Keskittää ruudun pystysuunnassa syötekentän rinnalle */
+        gap: 10px;           /* Jättää välin syötekentän ja ruudun väliin */
+      }
+
+      /* Syötekenttä täyttää kaiken vapaan tilan */
+      .input-wrapper input {
+        flex: 1;
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #333333;
+        border-radius: 10px;
+        box-sizing: border-box;
+      }
+
+      .status-box {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: bold;
+        border: 2px solid #ccc;
+        background-color: #f0f0f0;
+        color: #666;
+        transition: all 0.3s ease;
+      }
+
+      /* Kun arvo on TRUE (Vihreä kuittaus) */
+      .status-box.on-true {
+        background-color: #e6f4ea;
+        color: #137333;
+        border-color: #137333;
+      }
+
+      /* Kun arvo on FALSE (Punainen rasti) */
+      .status-box.on-false {
+        background-color: #fce8e6;
+        color: #c5221f;
+        border-color: #c5221f;
+      }
+
+      .sailio {
+        display: flex;
+        justify-content: space-between; /* Työntää sisällöt eri reunoihin */
+        align-items: center; /* Keskittää sisällöt pystysuunnassa (valinnainen) */
+        gap: 30px;
+      }
+      
+      .vasen {
+        flex: 1; /* Sama kuin: flex-grow: 1, flex-shrink: 1, flex-basis: 0% */
+        min-width: 0; /* TÄRKEÄ: estää sisältöä puskemasta leveyttä liian suureksi */
+      }
+
+      /* Ilmoitusviestit */
+      #ilmoitus {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 4px;
+        display: none;
+        font-size: 14px;
+      }
+      .success { background-color: #d4edda; color: #155724; }
+      .error { background-color: #f8d7da; color: #721c24; }
+    </style>
+  </head>
+  <body>
+
+    <img src="https://eoppimiskeskus.fi/wp-content/themes/eoppimiskeskus/img/logo.png" alt="eOppimiskeskus" width="300">
+    <div class="container">
+    <div class="sailio">
+    <div class = "vasen">
+      <div class="palkki-ryhma">
+        <h2 style="
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 20px;
+        line-height: 100%;
+        letter-spacing: 0;
+        border-radius: 10px;
+        ">Hakemusta kehittävä Agentti</h2>
+      </div>
+      
+
+
+      <!-- Hakemuksen linkki -->
+      <div class="form-group flex-item">
+        <label class="kielimalli-otsikko">Arvioitavan hakemusluonnoksen linkki:</label>
+        <div class="input-wrapper">
+          <input type="url" id="hakemusUrl" class="linkki pakollinenData" placeholder="https://drive.google.com/file/d/...">
+          <span id="b2-status" class="status-box" title="Tallennustila">-</span>
+        </div>
+      </div>
+
+      <!-- Linkki valittuun hakemukseen -->
+      <div class="form-group">
+        <label for="linkki">Linkki haettavaan hankkeeseen (URL):</label>
+        <div class="input-wrapper">
+          <input type="url" id="linkki" class="linkki" placeholder="https://example.com">
+          <span id="d2-status" class="status-box" title="Tallennustila">-</span>
+        </div>
+      </div>
+
+      <!-- Google Drive -kansion linkki -->
+      <div class="form-group" style="margin-top: 15px;">
+        <label for="driveKansioUrl">Google Drive -kansion linkki (projektin tiedostot):</label>
+        <div class="input-wrapper">
+          <input 
+            type="text" 
+            id="kansioUrl"
+            placeholder="https://drive.google.com/drive/folders/..." 
+            class="linkki"
+          >
+          <span id="c2-status" class="status-box" title="Tallennustila">-</span>
+        </div>
+      </div>
+
+        <!-- Lataa-painike -->
+        <button type="button" id="lataaBtn" class="submit-btn" onclick="lataaTiedot()" disabled>Tallenna lähdeaineisto</button>
+
+        <button type="button" id="tyhjennaBtn" class="submit-btn" onclick="vahvistaJaTyhjenna()">Tyhjennä kaikki!</button>
+
+        <br></br>
+
+        <div class="form-group">
+          <!-- Uusi vapaasti kirjoitettava tekstikenttä ohjeille/tarkennuksille -->
+          <label for="ohjeetAgentille" style="margin-top: 10px;">Mistä haluat keskustella:</label>
+          <textarea id="ohjeetAgentille" placeholder="Kirjoita tähän mistä haluat keskustella (esim. hakemuksen kokonaisuus, kehityskohteet, rahoitus)..."
+          class= "pakollinenSyote" 
+          style="width: 100%; min-height: 140px; max-height: 250px; padding: 12px; border: 1px solid #333333; border-radius: 10px; box-sizing: border-box; font-family: inherit; font-size: 14px; line-height: 1.5; resize: vertical; background-color: #fdfdfd;"
+          ></textarea>
+        </div>
+
+        <label for="valinta">Valitse tekoälymalli:</label>
+
+        <div class="form-group">
+          <select id="valinta" class="kielimalli" name="valinta">
+            <option value="gemini-3.5-flash-lite">Gemini-3.5-Flash-Lite</option>
+            <option value="gemini-3.6-flash">Gemini-3.6-Flash</option>
+            <option value="gemini-3.8-flash">Gemini-3.8-Flash</option>
+          </select>
+        </div>
+
+        <!-- Käynnistä-painike -->
+        <button type="button" id="syoteBtn" class="submit-btn" onclick="lahetaViestiAgentille()" disabled>Lähetä</button>
+    </div>
+
+      <div class = "oikea">
+        <div id="keskusteluAlue" style="background: #ffffff; padding: 15px; border-radius: 10px; width: 550px; max-height: 650px; overflow-y: auto; margin-bottom: 15px;">
+          <p style="color: #888;">Ladataan historiaa...</p>
+        </div>
+
+        <button type="button" id="sheetBtn" class="submit-btn" onclick="avaaOmaTaulukko()">Avaa minun Google Sheets -taulukko</button>
+
+      </div>
+    </div>
+    <div id="ilmoitus"></div>
+    </div>
+
+
+
+    <script>
+
+
+      const syoteBtn = document.getElementById('syoteBtn');
+      const lataaBtn = document.getElementById('lataaBtn');
+      const pakollisetKentat1 = document.querySelectorAll('.pakollinenData');
+      const pakollisetKentat2 = document.querySelectorAll('.pakollinenSyote');
+      const tekstikentta = document.getElementById('ohjeetAgentille');
+      const painikkeet = ['lataaBtn', 'syoteBtn', 'tyhjennaBtn'];
+      let onkoAjoKaynnissa = false;
+      let tilaKyselyAjastin = null;
+
+      // Funktio, joka tarkistaa onko kaikki kentät täytetty
+      function tarkistaKentat() {
+
+        if (onkoAjoKaynnissa) {
+        syoteBtn.disabled = true;
+        lataaBtn.disabled = true;
+        return;
+      }
+        const kaikkiTaytetty1 = Array.from(pakollisetKentat1).every(kentta => kentta.value.trim() !== '');
+        lataaBtn.disabled = !kaikkiTaytetty1;
+
+        const kaikkiTaytetty2 = Array.from(pakollisetKentat2).every(kentta => kentta.value.trim() !== '');
+        syoteBtn.disabled = !kaikkiTaytetty2;
+      }
+
+      // Lisätään kuuntelija jokaiselle pakolliselle kentälle
+      pakollisetKentat1.forEach(kentta => {
+        kentta.addEventListener('input', tarkistaKentat);
+      });
+
+      pakollisetKentat2.forEach(kentta => {
+        kentta.addEventListener('input', tarkistaKentat);
+      });
+
+      function lataaTiedot() {
+        tyhjennaIlmoitus();
+        // 1. Lukitaan kaikki napit
+        asetaPainikkeetLukitukseen(true);
+        const btn = document.getElementById('lataaBtn');
+        const ilmoitus = document.getElementById('ilmoitus');
+
+        ilmoitus.innerHTML = '';
+        ilmoitus.style.display = 'none';
+        ilmoitus.className = ''; // Poistetaan myös success/error-luokat
+        
+        // Näytetään lataustila
+        btn.textContent = 'Suoritetaan...';
+
+        // Haetaan elementit turvallisesti
+        const elLinkki = document.getElementById('linkki');
+        const elKansio = document.getElementById('kansioUrl');
+        const elHakemus = document.getElementById('hakemusUrl');
+
+        // Luodaan data-olio
+        const lomakeData = {
+          linkki: elLinkki ? elLinkki.value : "",
+          lahdeUrl: elKansio ? elKansio.value : "",
+          hakemusUrl: elHakemus ? elHakemus.value : ""
+        };
+
+        tilaKyselyAjastin = setInterval(seuraaTilaa, 2000);
+
+        // Kutsutaan Google Apps Scriptin taustafunktiota
+        google.script.run
+          .withSuccessHandler((tulos) => {
+            asetaPainikkeetLukitukseen(false);
+            pysaytaTilanSeuranta();
+            palautaPainikeData();
+            haeSolujenTilat();
+            const viesti = `Tausta data on tallennettu onnistuneesti!`;
+            naytaIlmoitus(viesti, "success");
+          })
+          .withFailureHandler((err) => {
+            asetaPainikkeetLukitukseen(false);
+            pysaytaTilanSeuranta();
+            palautaPainikeData();
+            haeSolujenTilat();
+            naytaIlmoitus("Virhe suorituksessa: " + err.message, "error");
+          })
+          .tallennaParametritJaAineisto(lomakeData); // <-- Varmista, että Google Apps Scriptin (.gs) puolelta löytyy samanniminen funktio
+      }
+
+      tekstikentta.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+          event.preventDefault(); // Estetään aina rivinvaihto Enterillä
+          
+          const teksti = event.target.value.trim();
+          
+          // Lähetetään VAIN jos ajo ei ole käynnissä JA tekstiä on kirjoitettu
+          if (!onkoAjoKaynnissa && teksti !== '') {
+            lahetaViestiAgentille();
+          }
+        }
+      });
+
+      function lahetaViestiAgentille() {
+        tyhjennaIlmoitus();
+        // 1. Lukitaan kaikki napit
+        asetaPainikkeetLukitukseen(true);
+        const btn = document.getElementById('syoteBtn');
+
+        const viestiTeksti = document.getElementById('ohjeetAgentille').value;
+        const malliValinta = document.getElementById('valinta').value;
+
+        const lahetettavaData = {
+          viesti: viestiTeksti,
+          malli: malliValinta
+        };
+
+        btn.textContent = '🤖 Lähetetään pyyntö Gemini-mallille...';
+
+        google.script.run
+          .withSuccessHandler((tulos) => {
+            if (tulos && tulos.success) {
+              // Päivitetään keskustelualue heti palautuneella historialla
+              naytaHistoriaUI(tulos.historia);
+              
+              // Tyhjennetään syötekenttä lähetyksen jälkeen
+              document.getElementById('ohjeetAgentille').value = '';
+            } else {
+              naytaIlmoitus("Virhe: " + tulos.error, "error");
+            }
+            
+            // 2. Vapautetaan kaikki napit
+            asetaPainikkeetLukitukseen(false);
+            palautaPainikeSyote();
+          })
+          .withFailureHandler((err) => {
+            naytaIlmoitus("Verkkovirhe: " + err.message, "error");
+            asetaPainikkeetLukitukseen(false);
+            palautaPainikeSyote();
+          })
+          .AgenttiKeskustelu(lahetettavaData);
+      }
+
+      function palautaPainikeData() {
+        const btn = document.getElementById('lataaBtn');
+        btn.textContent = 'Tallenna lähdeaineisto';
+      }
+
+      function palautaPainikeSyote() {
+        const btn = document.getElementById('syoteBtn');
+        btn.textContent = 'Lähetä';
+      }
+
+      function naytaIlmoitus(teksti, tyyppi) {
+        const ilmoitus = document.getElementById('ilmoitus');
+        ilmoitus.className = tyyppi;
+        ilmoitus.innerHTML = teksti;
+        ilmoitus.style.display = 'block';
+      }
+
+      function tyhjennaIlmoitus() {
+      const ilmoitus = document.getElementById('ilmoitus');
+      ilmoitus.style.display = 'none';
+      ilmoitus.innerHTML = '';
+      ilmoitus.className = '';
+    }
+
+
+      function nollaaValinta() {
+        document.getElementById('ladattuFileId').value = '';
+      }
+
+      function avaaOmaTaulukko() {
+        google.script.run
+          .withSuccessHandler(function(url) {
+          // Avaa luodun Sheets-taulukon uuteen selaimentabille
+            window.open(url, '_blank');
+          })
+          .haeTaulukonUrl();
+        }
+      
+      // 1. KÄYNNISTYSVAIHE: Haetaan historia automaattisesti, kun sivu ladataan
+      document.addEventListener('DOMContentLoaded', function() {
+        lataaJaPaivitaHistoria();
+        haeSolujenTilat();
+      });
+
+      // Funktio solujen tilojen hakemiseen ja päivittämiseen
+      function haeSolujenTilat() {
+        google.script.run
+          .withSuccessHandler(function(tulos) {
+            paivitaSoluStatus("b2-status", tulos.B2);
+            paivitaSoluStatus("c2-status", tulos.C2);
+            paivitaSoluStatus("d2-status", tulos.D2);
+          })
+          .withFailureHandler(function(err) {
+            console.error("Virhe haettaessa solujen tiloja:", err);
+          })
+          .tarkistaSolut(); // Viittaa Code.gs-puolen funktioon
+      }
+
+      // Kutsutaan kun solujen tilat saapuvat palvelimelta
+      function paivitaSoluStatus(elementId, onTosi) {
+        const elem = document.getElementById(elementId);
+        if (!elem) return;
+
+        if (onTosi === true) {
+          elem.className = "status-box on-true";
+          elem.innerText = "✓"; // Kuittaus
+          elem.title = "Tieto tallennettu Taulukkoon";
+        } else {
+          elem.className = "status-box on-false";
+          elem.innerText = "✗"; // Rasti
+          elem.title = "Tietoa ei ole vielä tallennettu";
+        }
+      }
+
+      // Funktio, joka pyytää taustajärjestelmältä (.gs) uusimman historian
+      function lataaJaPaivitaHistoria() {
+        google.script.run
+          .withSuccessHandler(naytaHistoriaUI)
+          .withFailureHandler((err) => {
+            console.error("Virhe historian haussa:", err);
+            document.getElementById('keskusteluAlue').innerHTML = '<p style="color: red;">Historian lataus epäonnistui.</p>';
+          })
+          .haeKeskusteluhistoriaUI();
+      }
+
+      // Funktio, joka renderöi haetun historian käyttöliittymään
+      function naytaHistoriaUI(historia) {
+        const alue = document.getElementById('keskusteluAlue');
+        alue.innerHTML = ''; // Tyhjennetään 'Ladataan...'-teksti tai vanhat viestit
+
+        if (!historia || historia.length === 0) {
+          alue.innerHTML = '<p style="color: #888; margin: 0;">Ei aiempaa keskustelua.</p>';
+          return;
+        }
+
+        historia.forEach(viesti => {
+          const viestiDiv = document.createElement('div');
+          viestiDiv.style.marginBottom = '10px';
+          viestiDiv.style.padding = '8px 12px';
+          viestiDiv.style.borderRadius = '8px';
+          viestiDiv.style.fontSize = '14px';
+          viestiDiv.style.whiteSpace = 'pre-wrap';
+
+          if (viesti.rooli === 'user') {
+            viestiDiv.style.backgroundColor = '#e3f2fd'; // Sininen tausta käyttäjälle
+            viestiDiv.style.borderLeft = '4px solid #2196f3';
+            viestiDiv.innerHTML = `<strong>Sinä:</strong><br>${muunnaMarkdownHTMLksi(viesti.teksti)}`;
+          } else {
+            viestiDiv.style.backgroundColor = '#f1f8e9'; // Vihreä tausta AI-agentille
+            viestiDiv.style.borderLeft = '4px solid #4caf50';
+            viestiDiv.innerHTML = `<strong>AI-agentti:</strong><br>${muunnaMarkdownHTMLksi(viesti.teksti)}`;
+          }
+
+          alue.appendChild(viestiDiv);
+        });
+
+        // Skrollataan automaattisesti alimpaan/uusimpaan viestiin
+        alue.scrollTop = alue.scrollHeight;
+      }
+
+      // Apufunktio, joka muuntaa Markdown-tekstin HTML-muotoon
+      function muunnaMarkdownHTMLksi(teksti) {
+        if (!teksti) return '';
+
+        let html = teksti
+          // Otsikot (####, ###, ##)
+          .replace(/^#### (.*$)/gim, '<h5 style="margin:8px 0 4px 0;">$1</h5>')
+          .replace(/^### (.*$)/gim, '<h4 style="margin:10px 0 5px 0;">$1</h4>')
+          .replace(/^## (.*$)/gim, '<h3 style="margin:12px 0 6px 0;">$1</h3>')
+          // Lihavoinnit (**teksti**)
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          // Kursiivit (*teksti*)
+          .replace(/\*(.*?)\*/g, '<em>$1</em>')
+          // Vaakaviivat (---)
+          .replace(/^---$/gim, '<hr style="margin:10px 0; border:0; border-top:1px solid #ccc;">')
+          // Rivinvaihdot (<br>)
+          .replace(/\n/g, '<br>');
+
+        return html;
+      }
+
+      function vahvistaJaTyhjenna() {
+        // 1. Kysytään vahvistus käyttäjältä
+        const vahvistettu = confirm("Oletko varma, että haluat tyhjentää kaiken pohjadatan? Tätä toimintoa ei voi peruuttaa.");
+        
+        // Jos käyttäjä painaa "Peruuta" (Cancel), keskeytetään suoritus
+        if (!vahvistettu) {
+          return;
+        }
+
+        // 2. Jos käyttäjä painoi "OK", estetään tuplaklikkaukset (valinnaisesti)
+        const ilmoitusElem = document.getElementById("tyhjennysIlmoitus");
+        if (ilmoitusElem) {
+          ilmoitusElem.innerText = "Tyhjennetään dataa...";
+          ilmoitusElem.style.color = "black";
+        }
+
+        // 3. Kutsutaan backendin funktiota
+        google.script.run
+          .withSuccessHandler((vastaus) => {
+            if (ilmoitusElem) {
+              ilmoitusElem.innerText = "Pohjadata tyhjennetty onnistuneesti!";
+              ilmoitusElem.style.color = "green";
+            }
+            
+            // Päivitetään käyttöliittymän solujen tilat
+            if (typeof haeSolujenTilat === "function") {
+              haeSolujenTilat();
+            }
+
+            // Päivitetään historia-osio automaattisesti
+            if (typeof lataaJaPaivitaHistoria === "function") {
+              try {
+                lataaJaPaivitaHistoria();
+              } catch (e) {
+                console.error("Historian päivitys epäonnistui tyhjennyksen jälkeen:", e);
+              }
+            }
+          })
+          .withFailureHandler((err) => {
+            if (ilmoitusElem) {
+              ilmoitusElem.innerText = "Tyhjennys epäonnistui: " + err.message;
+              ilmoitusElem.style.color = "red";
+            }
+          })
+          .tyhjennaKaikkiPohjadata();
+      }
+
+      function seuraaTilaa() {
+        if (!onkoAjoKaynnissa) return;
+
+        google.script.run
+          .withSuccessHandler((tilaTeksti) => {
+            if (onkoAjoKaynnissa && tilaTeksti && tilaTeksti !== "VALMIS") {
+              document.getElementById('lataaBtn').textContent = tilaTeksti;
+            }
+          })
+          .haeSuorituksenTila();
+        }
+
+        function pysaytaTilanSeuranta() {
+        if (tilaKyselyAjastin) {
+          clearInterval(tilaKyselyAjastin);
+          tilaKyselyAjastin = null;
+        }
+      }
+
+      // Yleisfunktio, joka muuttaa kaikkien painikkeiden disabled-tilan
+      function asetaPainikkeetLukitukseen(lukittu) {
+        onkoAjoKaynnissa = lukittu;
+        
+        painikkeet.forEach(id => {
+          const btn = document.getElementById(id);
+          if (btn) btn.disabled = lukittu;
+        });
+
+        // Jos painikkeet vapautetaan, tarkistetaan kenttien tilat (jos tarpeen)
+        if (!lukittu && typeof tarkistaKentat === 'function') {
+          tarkistaKentat();
+        }
+      }
+
+    </script>
+  </body>
+</html>
